@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "crispy_bootstrap5",
+    "homepage",
+    "budgeting",
+    "notes",
 ]
 
 MIDDLEWARE = [
@@ -45,7 +48,7 @@ ROOT_URLCONF = "proj.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates",],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -108,12 +111,13 @@ STATICFILES_DIRS = [
 
 STATIC_URL = "static/"
 STATIC_ROOT = "/home/MaksimIvanovBlr/static"
+# STATIC_ROOT = BASE_DIR/"static"
+
 
 
 MEDIA_URL = "media/"
 
-# MEDIA_ROOT = "/home/MaksimIvanovBlr/media"
-MEDIA_ROOT = BASE_DIR/"media"
+MEDIA_ROOT = "/home/MaksimIvanovBlr/media"
 
 
 # Static files (CSS, JavaScript, Images)
@@ -130,5 +134,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/login"
+# LOGIN_REDIRECT_URL = "/"
+# LOGOUT_REDIRECT_URL = "/login"
