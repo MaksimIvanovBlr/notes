@@ -1,3 +1,7 @@
 from django.contrib import admin
+from . import models
 
-# Register your models here.
+
+admin.site.register(models.Advance)
+admin.site.register(models.Expenses)
+admin.site.register(models.Salary)
