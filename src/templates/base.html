@@ -1,0 +1,99 @@
+{% load static %}
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> {% block title %} BOOK SHOP {% endblock title %} </title>
+
+
+<link href={% static "guide/css/bootstrap.min.css" %} rel="stylesheet">
+<link href={% static "icons/bootstrap-icons.css" %} rel="stylesheet">
+<link href={% static "guide/css/custom.css" %} rel="stylesheet">
+
+
+
+<meta name="theme-color" content="#712cf9">
+    <!-- Custom styles for this template -->
+  </head>
+  <body class="d-flex flex-column h-100">
+    
+<header>
+  <!-- Fixed navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'homepage:home'%}"><i class="bi bi-book-half"></i>Главная</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'book:list-book'%}">Книги</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'guide:list-author' %}">Авторы</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'guide:list-genre' %}">Жанры</a>
+          </li>
+          {% if user.is_staff %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'adminportal:adminpannel'%}">Портал администраторов</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/s-admin/">Django admin</a>
+          </li>
+          {% endif %}
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'adminportal:userpannel'%}">Привет,{{user}}</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login'%}">Войти</a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link disabled" >{% now "l d.m.Y" %}</a>
+          </li>        </ul>
+        <form class="d-flex" role="search" action="{% url 'homepage:search' %}" method="get">
+          <input class="form-control me-2" name="tosearch" type="text" placeholder="Поиск..." aria-label="Search">
+         <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+       </form>
+   <ul class="navbar-nav me-auto mb-2 mb-md-0">
+       <li class="nav-item">
+        <a class="nav-link" href="{% url 'order:cart'%}"><i class="bi bi-cart"></i>{{total_quantiti_in_cart}}</a>
+      </li>
+  </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+  <div class="container">
+  {% block body %}
+   
+  {% endblock body %}
+  </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light">
+  <div class="container">
+    <span class="text-muted"> 
+    {% block footer %}
+        учебный проект. 2022. IT academy
+    {% endblock footer %} 
+    </span>
+  </div>
+</footer>
+    <script src={% static "guide/js/bootstrap.bundle.min.js" %} ></script>
+    <script src={% static "guide/js/bootstrap.min.js" %} ></script>
+  </body>
+</html>
