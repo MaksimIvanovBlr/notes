@@ -5,8 +5,9 @@
 
 {% block body %}
 <ul>
-<li><a href="{% url 'expences:create' %}">Добавить</a></li>
-<li><a href="{% url 'expences:list' %}">Список</a></li>
-<li><a href="{% url 'budgeting:detail_expences' pk=1 %}">Детали расходов</a></li> 
+<li><a href="{% url 'expences:create' %}">Добавить статью расходов</a></li>
+<li><a href="{% url 'expences:list' %}">Список расходов</a></li>
+<li><a href="{% url 'expences:create-s' %}">Добавить зачисление на карту</a></li>
+<li><a href="{% url 'expences:list-s' %}">Список доходов</a></li>
 </ul>
 {% endblock body %}
