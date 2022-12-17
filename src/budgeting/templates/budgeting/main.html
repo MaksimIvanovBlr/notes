@@ -4,7 +4,9 @@
 
 
 {% block body %}
-<a href="{% url 'budgeting:add_expences' %}">1</a>
-<a href="{% url 'budgeting:update_expences' pk=1 %}">2</a>
-<a href="{% url 'budgeting:detail_expences' pk=1 %}">3</a>
+<ul>
+<li><a href="{% url 'budgeting:add_expences' %}">1</a></li>
+<li><a href="{% url 'budgeting:update_expences' pk=1 %}">Внести поправки</a></li>
+<li><a href="{% url 'budgeting:detail_expences' pk=1 %}">Детали расходов</a></li>
+</ul>
 {% endblock body %}

@@ -38,6 +38,17 @@ class Expenses(models.Model):
         max_digits=8,
         decimal_places=2
     )
+    @property
+    def sum(self):
+        sum = self.flat + self.utility_costs + self.phone + self.internet + self.transport
+        return sum
+
+    @property
+    def monthly_exp(self):
+        return self.per_day * 31
+    @property
+    def total(self):
+        return self.sum + self.monthly_exp
 
     
 class Advance(models.Model):

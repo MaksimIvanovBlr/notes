@@ -4,10 +4,16 @@
 
 
 {% block body %}
-{{object.flat}}
-{{object.utility_costs}}
-{{object.phone}}
-{{object.internet}}
-{{object.transport}}
-{{object.per_day}}
+<ul>
+<li>Квартира: <b>{{object.flat}}</b>BYN</li>
+<li>Коммунальные платежи: <b>{{object.utility_costs}}</b>BYN</li>
+<li>Телефон: <b>{{object.phone}}</b>BYN</li>
+<li>Интернет: <b>{{object.internet}}</b>BYN</li>
+<li>Расходы на транспорт: <b>{{object.transport}}</b>BYN</li>
+<li>Дневной расход: <b>{{object.per_day}}</b>BYN</li>
+<li>Сумма обязательных расходов: <b>{{object.sum}}</b>BYN</li>
+<br><br>
+ <li>Расходы на еду на месяц: <b>{{object.monthly_exp}}</b>BYN</li>
+<li>Общая сумма расходов: <b>{{object.total}}</b>BYN</li>
+<ul>
 {% endblock body %}
