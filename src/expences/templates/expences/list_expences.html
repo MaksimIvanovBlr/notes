@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block body %}
+
+<table class="table table-bordered border-primary">
+    {% for obj in object_list %}
+    <tr>
+        <td>{{obj.name}}</td>
+        <td>{{obj.value}}</td>
+        <td>{{obj.user}}</td>
+        <td>{{obj.date}}</td>
+        <td>{{obj.status}}</td>
+        <td><a href= "{% url 'expences:delete' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i>Удалить</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock body %}

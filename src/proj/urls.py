@@ -9,4 +9,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include('homepage.urls', namespace='homepage')),
     path("budgeting/", include('budgeting.urls', namespace='budgeting')),
+    path("expences/", include('expences.urls'), name="expences")
 ]

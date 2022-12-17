@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block body %}
+<ul>
+<li>{{object.user}}</li>
+<li>{{object.name}}</li>
+<li>{{object.value}}</li>
+<li>{{object.date}}</li>
+</ul>
+<h1>Удаляем данную строку?</h1>
+    <form method = 'post'>
+        {%csrf_token%}           
+        <button type="submit" class="btn btn-danger">ДА</button>
+    </form>
+
+
+{% endblock body %}
