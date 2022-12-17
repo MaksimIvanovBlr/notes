@@ -4,7 +4,7 @@
 
 
 {% block body %}
-
+<h1>Расходы</h1>
 <table class="table table-bordered border-primary">
     {% for obj in object_list %}
     <tr>
@@ -12,9 +12,12 @@
         <td>{{obj.value}}</td>
         <td>{{obj.user}}</td>
         <td>{{obj.date}}</td>
-        <td><a href= "{% url 'expences:delete' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i>Удалить</a></td>
+        <td><a href= "{% url 'expences:detail' pk=obj.pk %}" class="btn btn-secondary"><i class="bi bi-info-circle"></i></a></td>
+        <td><a href= "{% url 'expences:update' pk=obj.pk %}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a></td>
+        <td><a href= "{% url 'expences:delete' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
     </tr>
     {% endfor %}
 </table>
-<h3>{{total}}</h3>
+<h3>Общая сумма: <b>{{total}}</b></h3>
+<li><a href="{% url 'expences:create' %}">Добавить статью расходов</a></li>
 {% endblock body %}

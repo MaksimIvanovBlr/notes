@@ -17,4 +17,7 @@ urlpatterns = [
     path("detail-s/<int:pk>", views.DetailIncome.as_view(), name="detail-s"),
     path("delete-s/<int:pk>", views.DeleteIncome.as_view(), name="delete-s"),
     path("list-s/", views.ListIncome.as_view(), name="list-s"),
+
+    path("create-per-day",views.CreatePerDay.as_view(), name="create-per-day"),
+    path("update-per-day/<int:pk>", views.UpdatePerDay.as_view(), name="update-per-day"),
 ]

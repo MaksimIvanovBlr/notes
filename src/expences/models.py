@@ -4,10 +4,26 @@ from django.contrib.auth import get_user_model
 
 S_user = get_user_model()
 
+
+class PerDay(models.Model):
+    user = models.OneToOneField(
+        S_user,
+        verbose_name="Пользователь",
+        related_name='user_per_day', 
+        on_delete=models.CASCADE
+    )
+    value = models.DecimalField(
+        verbose_name='Расход на день',
+        max_digits=10,
+        decimal_places=2
+        )
+
+
 class IncomeAndExpediture(models.Model):
     user = models.ForeignKey(
         S_user,
-        verbose_name="Пользователь", 
+        verbose_name="Пользователь",
+        related_name='user_expences', 
         on_delete=models.CASCADE)
     
     name = models.CharField( 
@@ -27,13 +43,21 @@ class IncomeAndExpediture(models.Model):
     status = models.BooleanField(
         verbose_name='статус'
         )
+    description = models.TextField(
+        verbose_name='Описание',
+        max_length=500,
+        blank=True,
+        null=True
+    )
 
 
 class Salary(models.Model):
     user = models.ForeignKey(
         S_user,
-        verbose_name="Пользователь", 
+        verbose_name="Пользователь",
+        related_name='user_salary', 
         on_delete=models.CASCADE)
+
     name = models.CharField( 
         verbose_name='Наименование',
         max_length=50)
@@ -47,3 +71,4 @@ class Salary(models.Model):
         auto_now=True
     )
 
+    

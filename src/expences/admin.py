@@ -10,3 +10,4 @@ class SalaryAdmin(admin.ModelAdmin):
 
 admin.site.register(models.IncomeAndExpediture,IncomeAndExpeditureAdmin)
 admin.site.register(models.Salary, SalaryAdmin)
+admin.site.register(models.PerDay)
