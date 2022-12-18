@@ -6,8 +6,8 @@
 {% block body %}
 <h1>Заметки</h1>
 <ul>
-    <li>Создать заметку</li>
-    <li>Список заметок</li>
+    <li><a href="{% url 'notes:create'  %}">Создать заметку</a></li>
+    <li><a href="{% url 'notes:list' %}">Список заметок</a></li>
 
 </ul> 
 {% endblock body %}

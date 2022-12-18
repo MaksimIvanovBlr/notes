@@ -45,8 +45,9 @@ class ListNote(generic.ListView):
 
 class DetailNote(generic.DetailView):
     model = models.Notes
-    template_name = "notes/detail.html"
+    template_name = "notes/detail_note.html"
 
 class DeleteNote(generic.DeleteView):
     model = models.Notes
     template_name = "notes/delete_note.html"
+    success_url = reverse_lazy('notes:main')

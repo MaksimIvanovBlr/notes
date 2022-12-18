@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block body %}
+<h1>Заметки</h1>
+<table class="table table-bordered border-primary">
+    {% for obj in object_list %}
+    <tr>
+        <td>{{obj.user}}</td>
+        <td>{{obj.create_date}}</td>
+        <td>{{obj.update_date}}</td>
+        <td><a href= "{% url 'notes:detail' pk=obj.pk %}" class="btn btn-secondary"><i class="bi bi-info-circle"></i></a></td>
+        <td><a href= "{% url 'notes:update' pk=obj.pk %}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a></td>
+        <td><a href= "{% url 'notes:delete' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
+    </tr>
+    {% endfor %}
+</table>
+<li><a href="{% url 'notes:create' %}">Добавить заметку</a></li>
+{% endblock body %}
