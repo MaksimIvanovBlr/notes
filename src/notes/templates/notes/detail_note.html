@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block body %}
+<ul>
+<li>Название: <b>{{object.name}}</b></li>
+<li>Сумма: <b>{{object.value}}</b>BYN</li>
+<li>Описание: <b>{{object.description|default:'Отсутствует'}}</b></li>
+<br><br>
+<ul>
+{% endblock body %}
