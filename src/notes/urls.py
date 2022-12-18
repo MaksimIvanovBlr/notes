@@ -6,5 +6,9 @@ app_name = 'notes'
 
 urlpatterns = [
     path("",views.NotesView.as_view(), name='main' ),
+    path("",views.NotesView.as_view(), name='main' ),
+    path("",views.NotesView.as_view(), name='main' ),
+    path("",views.NotesView.as_view(), name='main' ),
+    path("",views.NotesView.as_view(), name='main' ),
 ]
 
