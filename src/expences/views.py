@@ -11,8 +11,9 @@ from django.views.generic.edit import FormMixin
 
 
 
-class ExpencesView(date_day_to.ToSalary, generic.TemplateView):
+class ExpencesView(LoginRequiredMixin,date_day_to.ToSalary, generic.TemplateView):
     template_name = "expences/main.html"
+    login_url = reverse_lazy('login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         x = date_day_to.ToSalary()
@@ -20,6 +21,11 @@ class ExpencesView(date_day_to.ToSalary, generic.TemplateView):
         context["money_to_salary"] = self.request.user.user_per_day.value * x.days_to_salary
         context["reserv"] = self.request.user.user_reserv.value
         context["ost"] = (self.request.user.user_per_day.value * x.days_to_salary) + self.request.user.user_reserv.value
+        not_paid= models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status=False))
+        sum_of_not_paid = 0 
+        for val in not_paid:
+            sum_of_not_paid += val.value
+        context["not_paid"] = sum_of_not_paid
         # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
         # print(income)
         # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))
@@ -38,11 +44,12 @@ class ExpencesView(date_day_to.ToSalary, generic.TemplateView):
 # расходы
 
 
-class CreateExpences(generic.CreateView):
+class CreateExpences(LoginRequiredMixin,generic.CreateView):
     model = models.IncomeAndExpediture
     form_class = forms.ExpencesForms
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list')
+    login_url = reverse_lazy('login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Создать'
@@ -52,11 +59,12 @@ class CreateExpences(generic.CreateView):
         form.instance.user = user
         return super().form_valid(form)
     
-class UpdateExpences(generic.UpdateView):
+class UpdateExpences(LoginRequiredMixin,generic.UpdateView):
     model = models.IncomeAndExpediture
     form_class = forms.ExpencesForms
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list')
+    login_url = reverse_lazy('login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить'
@@ -65,15 +73,16 @@ class UpdateExpences(generic.UpdateView):
         # тут нужно добавить логику расчета резерва
         return super().get_success_url()
 
-class DeleteExpences(generic.DeleteView):
+class DeleteExpences(LoginRequiredMixin,generic.DeleteView):
     model = models.IncomeAndExpediture
     template_name = "expences/delete_expences.html"
     success_url = reverse_lazy('expences:list')
 
 
-class ListExpences(generic.ListView):
+class ListExpences(LoginRequiredMixin,generic.ListView):
     model = models.IncomeAndExpediture
     template_name = "expences/list_expences.html"
+    login_url = reverse_lazy('login')
     # from_class = forms.ExpencesForms
     def get_queryset(self):
         user = self.request.user
@@ -98,9 +107,10 @@ class ListExpences(generic.ListView):
     #     return self.form_valid(form)
     
 
-class DetailExpences(generic.DetailView):
+class DetailExpences(LoginRequiredMixin,generic.DetailView):
     model = models.IncomeAndExpediture
     template_name = "expences/detail_expences.html"
+    login_url = reverse_lazy('login')
 
 
 
@@ -108,11 +118,12 @@ class DetailExpences(generic.DetailView):
 #  доход
 
 
-class CreateIncome(generic.CreateView):
+class CreateIncome(LoginRequiredMixin,generic.CreateView):
     model = models.Salary
     form_class = forms.SalaryForms
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list-s')
+    login_url = reverse_lazy('login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Создать'
@@ -122,10 +133,11 @@ class CreateIncome(generic.CreateView):
         form.instance.user = user
         return super().form_valid(form)
     
-class UpdateIncome(generic.UpdateView):
+class UpdateIncome(LoginRequiredMixin,generic.UpdateView):
     model = models.Salary
     form_class = forms.SalaryForms
     template_name = "expences/edit_expences.html"
+    login_url = reverse_lazy('login')
     success_url = reverse_lazy('expences:list-s')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -133,15 +145,17 @@ class UpdateIncome(generic.UpdateView):
         return context
     
 
-class DeleteIncome(generic.DeleteView):
+class DeleteIncome(LoginRequiredMixin,generic.DeleteView):
     model = models.Salary
     template_name = "expences/delete_expences.html"
+    login_url = reverse_lazy('login')
     success_url = reverse_lazy('expences:list-s')
 
 
-class ListIncome(generic.ListView):
+class ListIncome(LoginRequiredMixin,generic.ListView):
     model = models.Salary
     template_name = "expences/list_expences-s.html"
+    login_url = reverse_lazy('login')
     def get_queryset(self):
         user = self.request.user
         object_list = models.Salary.objects.filter(user=user)
@@ -158,19 +172,21 @@ class ListIncome(generic.ListView):
     
     
 
-class DetailIncome(generic.DetailView):
+class DetailIncome(LoginRequiredMixin,generic.DetailView):
     model = models.Salary
     template_name = "expences/detail_expences.html"
+    login_url = reverse_lazy('login')
 
 
 
 # PerDay/дневной расход 
 
-class CreatePerDay (generic.CreateView):
+class CreatePerDay (LoginRequiredMixin,generic.CreateView):
     model = models.PerDay
     form_class = forms.PerDayForms
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:main')
+    login_url = reverse_lazy('login')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Создать'
@@ -180,10 +196,11 @@ class CreatePerDay (generic.CreateView):
         form.instance.user = user
         return super().form_valid(form)
     
-class UpdatePerDay(generic.UpdateView):
+class UpdatePerDay(LoginRequiredMixin,generic.UpdateView):
     model = models.PerDay
     form_class = forms.PerDayForms
     template_name = "expences/edit_expences.html"
+    login_url = reverse_lazy('login')
     success_url = reverse_lazy('expences:main')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -191,8 +208,9 @@ class UpdatePerDay(generic.UpdateView):
         return context
 
     
-class DetailPerDay(generic.DetailView):
+class DetailPerDay(LoginRequiredMixin,generic.DetailView):
     model = models.PerDay
+    login_url = reverse_lazy('login')
     template_name = "expences/detil_expences.html"
     def get_queryset(self):
         user = self.request.user
@@ -202,8 +220,9 @@ class DetailPerDay(generic.DetailView):
 
 # резерв
 
-class UpdateReserv(generic.UpdateView):
+class UpdateReserv(LoginRequiredMixin,generic.UpdateView):
     model = models.Reserv
+    login_url = reverse_lazy('login')
     template_name = "expences/edit_reserv.html"
     success_url = reverse_lazy('expences:main')
     form_class = forms.ReservForms
