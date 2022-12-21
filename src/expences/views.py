@@ -3,7 +3,7 @@ from . import models, forms
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from . import mixins
+from . import date_day_to
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models import Q
@@ -11,14 +11,15 @@ from django.views.generic.edit import FormMixin
 
 
 
-class ExpencesView(mixins.ToSalary, generic.TemplateView):
+class ExpencesView(date_day_to.ToSalary, generic.TemplateView):
     template_name = "expences/main.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        x = mixins.ToSalary()
+        x = date_day_to.ToSalary()
         context["days_to_salary"] = x.days_to_salary
         context["money_to_salary"] = self.request.user.user_per_day.value * x.days_to_salary
         context["reserv"] = self.request.user.user_reserv.value
+        context["ost"] = (self.request.user.user_per_day.value * x.days_to_salary) + self.request.user.user_reserv.value
         # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
         # print(income)
         # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))

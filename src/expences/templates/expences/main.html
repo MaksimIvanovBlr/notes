@@ -23,7 +23,8 @@
 <h3>Дней до зарплаты: {{ days_to_salary }}</h3>
 <h3>На ежедневыне расходы до конца месяца: {{ money_to_salary }}руб(расчетный остаток)</h3>
 
-<h3>Резерв: {{ reserv }} руб</h3>
+<h3><a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}">Резерв: {{ reserv }} руб</a></h3>
+<h3>Прогнозируемый остаток на карте: {{ ost }} руб </h3>
 {% comment %} <h3>!!!: {{ money_to_salary }}руб(расчетный остаток)</h3> {% endcomment %}
 {% endblock body %}
 
