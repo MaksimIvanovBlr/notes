@@ -20,4 +20,6 @@ urlpatterns = [
 
     path("create-per-day",views.CreatePerDay.as_view(), name="create-per-day"),
     path("update-per-day/<int:pk>", views.UpdatePerDay.as_view(), name="update-per-day"),
+
+    path("reserv/<int:pk>", views.UpdateReserv.as_view(), name="reserv")
 ]

@@ -74,3 +74,23 @@ class Salary(models.Model):
         verbose_name='статус'
         )
     
+
+# резерв
+class Reserv(models.Model):
+    user = models.OneToOneField(
+        S_user,
+        verbose_name="Пользователь",
+        related_name='user_reserv', 
+        on_delete=models.CASCADE)
+    value = models.DecimalField(
+        verbose_name='Значение',
+        max_digits=100,
+        decimal_places=2,
+        default= 0
+    )   
+    date = models.DateField(
+        verbose_name='Дата изменения',
+        auto_now_add=True
+    )
+
+    

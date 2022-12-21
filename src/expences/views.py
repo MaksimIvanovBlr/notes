@@ -18,6 +18,7 @@ class ExpencesView(mixins.ToSalary, generic.TemplateView):
         x = mixins.ToSalary()
         context["days_to_salary"] = x.days_to_salary
         context["money_to_salary"] = self.request.user.user_per_day.value * x.days_to_salary
+        context["reserv"] = self.request.user.user_reserv.value
         # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
         # print(income)
         # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))
@@ -59,7 +60,9 @@ class UpdateExpences(generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить'
         return context
-    
+    def get_success_url(self):
+        # тут нужно добавить логику расчета резерва
+        return super().get_success_url()
 
 class DeleteExpences(generic.DeleteView):
     model = models.IncomeAndExpediture
@@ -194,3 +197,12 @@ class DetailPerDay(generic.DetailView):
         user = self.request.user
         object_list = models.PerDay.objects.filter(user=user)
         return object_list
+
+
+# резерв
+
+class UpdateReserv(generic.UpdateView):
+    model = models.Reserv
+    template_name = "expences/edit_reserv.html"
+    success_url = reverse_lazy('expences:main')
+    form_class = forms.ReservForms

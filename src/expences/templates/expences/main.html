@@ -5,17 +5,17 @@
 
 {% block body %}
 <ul>
-{% comment %} <li><a href="{% url 'expences:create' %}">Добавить статью расходов</a></li> {% endcomment %}
-<li><a href="{% url 'expences:list' %}">Список расходов</a></li>
-{% comment %} <li><a href="{% url 'expences:create-s' %}">Добавить зачисление на карту</a></li> {% endcomment %}
-<li><a href="{% url 'expences:list-s' %}">Список доходов</a></li>
+    <br>
+    <li><a href="{% url 'expences:list' %}"><b>Список расходов</b></a></li>
+    <br>
+    <li><a href="{% url 'expences:list-s' %}"><b>Список доходов</b></a></li>
+    <br>
+    <br>
+    <li><a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}"><b>Изменить дневной расход</b></a></li>
+    <br>
+    <li><a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}"><b>Изменить резерв</b></a></li>
+    
 
-
-{% if user.user_per_day %}
-<li><a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}">Изменить дневной расход</a></li>
-{% else %}
-<li><a href="{% url 'expences:create-per-day' %}">Установить дневной расход</a></li>
-{% endif %}
 
 
 </ul>
@@ -23,6 +23,26 @@
 <h3>Дней до зарплаты: {{ days_to_salary }}</h3>
 <h3>На ежедневыне расходы до конца месяца: {{ money_to_salary }}руб(расчетный остаток)</h3>
 
-<h3>Резерв: {{ reserv }}</h3>
-<h3>!!!: {{ money_to_salary }}руб(расчетный остаток)</h3>
+<h3>Резерв: {{ reserv }} руб</h3>
+{% comment %} <h3>!!!: {{ money_to_salary }}руб(расчетный остаток)</h3> {% endcomment %}
 {% endblock body %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {% comment %} <li><a href="{% url 'expences:create' %}">Добавить статью расходов</a></li> {% endcomment %}
+{% comment %} <li><a href="{% url 'expences:create-s' %}">Добавить зачисление на карту</a></li> {% endcomment %}
+{% comment %} {% if user.user_per_day %} {% endcomment %}
+{% comment %} {% else %}
+<li><a href="{% url 'expences:create-per-day' %}">Установить дневной расход</a></li>
+{% endif %} {% endcomment %}
