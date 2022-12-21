@@ -12,6 +12,7 @@
         <td>{{obj.value}}</td>
         <td>{{obj.user}}</td>
         <td>{{obj.date}}</td>
+        <td>{{obj.status}}</td>
         <td><a href= "{% url 'expences:detail-s' pk=obj.pk %}" class="btn btn-secondary"><i class="bi bi-info-circle"></i></a></td>
         <td><a href= "{% url 'expences:update-s' pk=obj.pk %}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a></td>
         <td><a href= "{% url 'expences:delete-s' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>

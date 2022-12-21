@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 
 user_s = get_user_model()
 user1 = User
+date = datetime.now()
+
 
 class ToSalary():
     now_date = datetime.now()

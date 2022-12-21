@@ -8,16 +8,38 @@
 <table class="table table-bordered border-primary">
     {% for obj in object_list %}
     <tr>
-        <td>{{obj.name}}</td>
+        {% if obj.status == False %}
+        <td>{{obj.name}} </td>
         <td>{{obj.value}}</td>
         <td>{{obj.user}}</td>
         <td>{{obj.date}}</td>
+        <td> 
+            {% if obj.status == False %}
+            Не оплачено
+            {% else %}
+            Оплачено
+            {% endif %}
+        </td>
+        {% else %}
+        <td><s>{{obj.name}} </s></td>
+         <td><s>{{obj.value}}</s></td>
+        <td><s>{{obj.user}}</s></td>
+        <td><s>{{obj.date}}</s></td>
+        <td>
+            {% if obj.status == False %}
+            Не оплачено
+            {% else %}
+            Оплачено
+            {% endif %}
+        </td>
+        {% endif %}
         <td><a href= "{% url 'expences:detail' pk=obj.pk %}" class="btn btn-secondary"><i class="bi bi-info-circle"></i></a></td>
         <td><a href= "{% url 'expences:update' pk=obj.pk %}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a></td>
         <td><a href= "{% url 'expences:delete' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
     </tr>
     {% endfor %}
 </table>
-<h3>Общая сумма: <b>{{total}}</b></h3>
+<h3>Общая сумма: <b>{{total_to_pay}}</b></h3>
+<h3>Осталось оплатить услуги на сумму: <b>{{total}}</b></h3>
 <li><a href="{% url 'expences:create' %}">Добавить статью расходов</a></li>
 {% endblock body %}

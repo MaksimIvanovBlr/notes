@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 S_user = get_user_model()
 
-
+#  дневной расход
 class PerDay(models.Model):
     user = models.OneToOneField(
         S_user,
@@ -18,7 +18,7 @@ class PerDay(models.Model):
         decimal_places=2
         )
 
-
+# расходы
 class IncomeAndExpediture(models.Model):
     user = models.ForeignKey(
         S_user,
@@ -50,7 +50,7 @@ class IncomeAndExpediture(models.Model):
         null=True
     )
 
-
+# доходы
 class Salary(models.Model):
     user = models.ForeignKey(
         S_user,
@@ -68,7 +68,9 @@ class Salary(models.Model):
     )   
     date = models.DateField(
         verbose_name='дата изменения',
-        auto_now=True
+        auto_now_add=True
     )
-
+    status = models.BooleanField(
+        verbose_name='статус'
+        )
     

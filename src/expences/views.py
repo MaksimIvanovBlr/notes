@@ -6,6 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from . import mixins
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.db.models import Q
+from django.views.generic.edit import FormMixin
+
 
 
 class ExpencesView(mixins.ToSalary, generic.TemplateView):
@@ -15,6 +18,18 @@ class ExpencesView(mixins.ToSalary, generic.TemplateView):
         x = mixins.ToSalary()
         context["days_to_salary"] = x.days_to_salary
         context["money_to_salary"] = self.request.user.user_per_day.value * x.days_to_salary
+        # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
+        # print(income)
+        # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))
+        # print(out)
+        # sum_of_income = 0 
+        # for val in income:
+        #     sum_of_income += val.value
+        # sum_of_out = 0
+        # for val in out:
+        #     sum_of_out += val.value
+        # context['reserv'] = sum_of_income - sum_of_out - self.request.user.user_per_day.value * x.days_to_salary
+        # print (sum_of_income)
         return context
     
 
@@ -39,6 +54,7 @@ class UpdateExpences(generic.UpdateView):
     model = models.IncomeAndExpediture
     form_class = forms.ExpencesForms
     template_name = "expences/edit_expences.html"
+    success_url = reverse_lazy('expences:list')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить'
@@ -54,6 +70,7 @@ class DeleteExpences(generic.DeleteView):
 class ListExpences(generic.ListView):
     model = models.IncomeAndExpediture
     template_name = "expences/list_expences.html"
+    # from_class = forms.ExpencesForms
     def get_queryset(self):
         user = self.request.user
         object_list = models.IncomeAndExpediture.objects.filter(user=user)
@@ -62,12 +79,19 @@ class ListExpences(generic.ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         object_list = models.IncomeAndExpediture.objects.filter(user=user)
-        total = 0
+        total_to_pay = 0
         for obj in object_list:
+            total_to_pay += obj.value
+        context["total_to_pay"] = total_to_pay
+        object_list_2 = models.IncomeAndExpediture.objects.filter(Q(user=user) & Q(status = False))
+        total = 0
+        for obj in object_list_2:
             total += obj.value
-        context["total"] = total
+        context['total'] = total
         return context
-    
+    # def post(self, request, *args, **kwargs):
+    #     form = self.get_form()
+    #     return self.form_valid(form)
     
 
 class DetailExpences(generic.DetailView):
@@ -98,6 +122,7 @@ class UpdateIncome(generic.UpdateView):
     model = models.Salary
     form_class = forms.SalaryForms
     template_name = "expences/edit_expences.html"
+    success_url = reverse_lazy('expences:list-s')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить'
