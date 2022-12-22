@@ -9,5 +9,20 @@
     <li><a href="{% url 'notes:create'  %}">Создать заметку</a></li>
     <li><a href="{% url 'notes:list' %}">Список заметок</a></li>
 
-</ul> 
+</ul>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div> 
+<p>Заметки за текущий месяц:</p>
+{% for obj in object_list %}
+<ul><i class="bi bi-journal-check"></i>
+    <li>изменена: {{obj.update_date}}</li>
+    <li>заметка: {{obj.text}}</li>
+</ul>
+{% endfor %}
+</div>
 {% endblock body %}
