@@ -24,12 +24,10 @@ class IncomeAndExpediture(models.Model):
         S_user,
         verbose_name="Пользователь",
         related_name='user_expences', 
-        on_delete=models.CASCADE)
-    
+        on_delete=models.CASCADE)   
     name = models.CharField( 
         verbose_name='Наименование',
         max_length=50)
-
     value = models.DecimalField(
         verbose_name='Значение',
         max_digits=10,
@@ -39,7 +37,6 @@ class IncomeAndExpediture(models.Model):
         verbose_name='дата изменения',
         auto_now=True
     )
-
     status = models.BooleanField(
         verbose_name='статус'
         )
@@ -50,17 +47,26 @@ class IncomeAndExpediture(models.Model):
         null=True
     )
 
-# доходы
+# аванс/зарплата
 class Salary(models.Model):
+    X = 'аванс'
+    Y = 'зарплата'
+
+    CHOISE_GROUP = {
+        (X, 'аванс'),
+        (Y, 'зарплата'),
+    }
+
     user = models.ForeignKey(
         S_user,
         verbose_name="Пользователь",
         related_name='user_salary', 
         on_delete=models.CASCADE)
-
     name = models.CharField( 
         verbose_name='Наименование',
-        max_length=50)
+        max_length=50,
+        choices=CHOISE_GROUP,
+        default=Y)
     value = models.DecimalField(
         verbose_name='Значение',
         max_digits=10,
@@ -74,6 +80,27 @@ class Salary(models.Model):
         verbose_name='статус'
         )
     
+# дополнительные доходы
+class AdditionalIncome(models.Model):
+    user = models.ForeignKey(
+        S_user,
+        verbose_name="Пользователь",
+        related_name='user_additional_income', 
+        on_delete=models.CASCADE)
+    name = models.CharField( 
+        verbose_name='Наименование',
+        max_length=50,
+        )
+    value = models.DecimalField(
+        verbose_name='Значение',
+        max_digits=10,
+        decimal_places=2
+    )   
+    date = models.DateField(
+        verbose_name='дата изменения',
+        auto_now_add=True
+    )
+
 
 # резерв
 class Reserv(models.Model):

@@ -20,12 +20,12 @@ class ExpencesView(LoginRequiredMixin,date_day_to.ToSalary, generic.TemplateView
         context["days_to_salary"] = x.days_to_salary
         context["money_to_salary"] = self.request.user.user_per_day.value * x.days_to_salary
         context["reserv"] = self.request.user.user_reserv.value
-        context["ost"] = (self.request.user.user_per_day.value * x.days_to_salary) + self.request.user.user_reserv.value
         not_paid= models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status=False))
         sum_of_not_paid = 0 
         for val in not_paid:
             sum_of_not_paid += val.value
         context["not_paid"] = sum_of_not_paid
+        context["ost"] = (self.request.user.user_per_day.value * x.days_to_salary) + self.request.user.user_reserv.value + sum_of_not_paid
         # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
         # print(income)
         # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))
@@ -46,7 +46,7 @@ class ExpencesView(LoginRequiredMixin,date_day_to.ToSalary, generic.TemplateView
 
 class CreateExpences(LoginRequiredMixin,generic.CreateView):
     model = models.IncomeAndExpediture
-    form_class = forms.ExpencesForms
+    form_class = forms.ExpencesForm
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list')
     login_url = reverse_lazy('login')
@@ -61,7 +61,7 @@ class CreateExpences(LoginRequiredMixin,generic.CreateView):
     
 class UpdateExpences(LoginRequiredMixin,generic.UpdateView):
     model = models.IncomeAndExpediture
-    form_class = forms.ExpencesForms
+    form_class = forms.ExpencesForm
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list')
     login_url = reverse_lazy('login')
@@ -77,6 +77,12 @@ class DeleteExpences(LoginRequiredMixin,generic.DeleteView):
     model = models.IncomeAndExpediture
     template_name = "expences/delete_expences.html"
     success_url = reverse_lazy('expences:list')
+    login_url = reverse_lazy('expences:main')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Удаление'
+        context["alert_message"] = 'Вы точно хотите удалить данную сторку расходов???'
+        return context
 
 
 class ListExpences(LoginRequiredMixin,generic.ListView):
@@ -115,12 +121,12 @@ class DetailExpences(LoginRequiredMixin,generic.DetailView):
 
 
 
-#  доход
+#  зарплата/аванс
 
 
 class CreateIncome(LoginRequiredMixin,generic.CreateView):
     model = models.Salary
-    form_class = forms.SalaryForms
+    form_class = forms.SalaryForm
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list-s')
     login_url = reverse_lazy('login')
@@ -135,7 +141,7 @@ class CreateIncome(LoginRequiredMixin,generic.CreateView):
     
 class UpdateIncome(LoginRequiredMixin,generic.UpdateView):
     model = models.Salary
-    form_class = forms.SalaryForms
+    form_class = forms.SalaryForm
     template_name = "expences/edit_expences.html"
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('expences:list-s')
@@ -150,6 +156,11 @@ class DeleteIncome(LoginRequiredMixin,generic.DeleteView):
     template_name = "expences/delete_expences.html"
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('expences:list-s')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Удаление'
+        context["alert_message"] = 'Вы точно хотите удалить данную запись о зарплате(авансе)???'
+        return context
 
 
 class ListIncome(LoginRequiredMixin,generic.ListView):
@@ -183,7 +194,7 @@ class DetailIncome(LoginRequiredMixin,generic.DetailView):
 
 class CreatePerDay (LoginRequiredMixin,generic.CreateView):
     model = models.PerDay
-    form_class = forms.PerDayForms
+    form_class = forms.PerDayForm
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:main')
     login_url = reverse_lazy('login')
@@ -198,7 +209,7 @@ class CreatePerDay (LoginRequiredMixin,generic.CreateView):
     
 class UpdatePerDay(LoginRequiredMixin,generic.UpdateView):
     model = models.PerDay
-    form_class = forms.PerDayForms
+    form_class = forms.PerDayForm
     template_name = "expences/edit_expences.html"
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('expences:main')
@@ -225,4 +236,64 @@ class UpdateReserv(LoginRequiredMixin,generic.UpdateView):
     login_url = reverse_lazy('login')
     template_name = "expences/edit_reserv.html"
     success_url = reverse_lazy('expences:main')
-    form_class = forms.ReservForms
+    form_class = forms.ReservForm
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Изменить резерв'
+        return context
+
+
+# дополнительных доход  
+
+class CreateAdditional(LoginRequiredMixin,generic.CreateView):
+    model = models.AdditionalIncome
+    template_name = "expences/edit_expences.html"
+    form_class = forms.AdditionalIncomeForm
+    success_url = reverse_lazy('expences:main')
+    login_url = reverse_lazy('login')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Добавить дополнительный доход'
+        return context
+
+class UpdateAdditional(LoginRequiredMixin,generic.UpdateView):
+    model = models.AdditionalIncome
+    template_name = "expences/edit_expences.html"
+    form_class = forms.AdditionalIncomeForm
+    success_url = reverse_lazy('expences:main')
+    login_url = reverse_lazy('login')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Изменить дополнительный доход'
+        return context
+
+class DeleteAdditional(LoginRequiredMixin,generic.DeleteView):
+    model = models.AdditionalIncome
+    template_name = "expences/delete_expences.html"
+    success_url = reverse_lazy('expences:main')
+    login_url = reverse_lazy('login')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Удаление'
+        context["alert_message"] = 'Вы точно хотите удалить данную запись о допонительном доходе???'
+        return context
+
+
+class ListAdditional(generic.ListView):
+    model = models.AdditionalIncome
+    template_name = "expences/list_expences-a.html"
+    def get_queryset(self):
+        object_list = models.AdditionalIncome.objects.filter(user = self.request.user)
+        return object_list
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        object_list = models.AdditionalIncome.objects.filter(user = self.request.user)
+        total = 0
+        for object in object_list:
+            total += object.value
+        context["total"] = total
+        return context
+
+
+
+

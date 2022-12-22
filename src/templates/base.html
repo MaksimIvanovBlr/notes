@@ -41,6 +41,7 @@
           <li class="nav-item">
             <a class="nav-link" href="">Спорт</a>
           </li>
+     
           {% comment %} {% if user.is_staff %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'adminportal:adminpannel'%}">None</a>
@@ -71,7 +72,7 @@
 </header>
 
 <!-- Begin page content -->
-<main class="flex-shrink-0">
+<main class="p-3 mb-2 bg-dark text-white">
   <div class="container">
   {% block body %}
    
@@ -79,7 +80,7 @@
   </div>
 </main>
 
-<footer class="footer mt-auto py-3 bg-light">
+<footer class="footer mt-auto py-3 bg-dark text-white">
   <div class="container">
     <span class="text-muted"> 
     {% block footer %}

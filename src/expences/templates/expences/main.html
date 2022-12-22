@@ -10,6 +10,8 @@
     <br>
     <li><a href="{% url 'expences:list-s' %}"><b>Список доходов</b></a></li>
     <br>
+    <li><a href="{% url 'expences:list-a' %}"><b>Список дополнительных доходов</b></a></li>
+    <br>
     <br>
     <li><a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}"><b>Изменить дневной расход</b></a></li>
     <br>
@@ -28,6 +30,9 @@
 <h3><a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}">Резерв: {{ reserv }} руб</a></h3>
 <h3>Прогнозируемый остаток на карте: {{ ost }} руб </h3>
 {% comment %} <h3>!!!: {{ money_to_salary }}руб(расчетный остаток)</h3> {% endcomment %}
+<br>
+<br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock body %}
 
 

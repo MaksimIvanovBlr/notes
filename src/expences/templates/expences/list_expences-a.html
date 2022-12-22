@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+
+{% block body %}
+<h1>Дополнительные доходы</h2>
+<table class="table table-dark table-striped">
+    {% for obj in object_list %}
+    <tr>
+        <td>{{obj.name}}</td>
+        <td>{{obj.value}}</td>
+        <td>{{obj.user}}</td>
+        <td>{{obj.date}}</td>
+        <td><a href= "{% url 'expences:update-a' pk=obj.pk %}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a></td>
+        <td><a href= "{% url 'expences:delete-a' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
+    </tr>
+    {% endfor %}
+</table>
+<h3>Общая сумма: <b>{{total}}</b></h3>
+<li><a href="{% url 'expences:create-a' %}">Добавить зачисление на карту( Дополнительный доход)</a></li>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<br>
+<br>
+{% endblock body %}

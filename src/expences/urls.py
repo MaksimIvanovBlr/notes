@@ -21,5 +21,10 @@ urlpatterns = [
     path("create-per-day",views.CreatePerDay.as_view(), name="create-per-day"),
     path("update-per-day/<int:pk>", views.UpdatePerDay.as_view(), name="update-per-day"),
 
-    path("reserv/<int:pk>", views.UpdateReserv.as_view(), name="reserv")
+    path("reserv/<int:pk>", views.UpdateReserv.as_view(), name="reserv"),
+
+    path("create-a/", views.CreateAdditional.as_view(), name="create-a"),
+    path("update-a/<int:pk>", views.UpdateAdditional.as_view(), name="update-a"),
+    path("delete-a/<int:pk>", views.DeleteAdditional.as_view(), name="delete-a"),
+    path("list-a/", views.ListAdditional.as_view(), name="list-a")
 ]
