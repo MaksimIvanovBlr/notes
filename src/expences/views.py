@@ -26,6 +26,12 @@ class ExpencesView(LoginRequiredMixin,date_day_to.ToSalary, generic.TemplateView
             sum_of_not_paid += val.value
         context["not_paid"] = sum_of_not_paid
         context["ost"] = (self.request.user.user_per_day.value * x.days_to_salary) + self.request.user.user_reserv.value + sum_of_not_paid
+        additional = models.AdditionalIncome.objects.filter(Q(user = self.request.user) & Q(date__year=date_day_to.date.year,
+    date__month=date_day_to.date.month))
+        sum_of_additional = 0
+        for add in additional:
+            sum_of_additional += add.value
+        context["additional"] = sum_of_additional
         # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
         # print(income)
         # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))
@@ -255,6 +261,9 @@ class CreateAdditional(LoginRequiredMixin,generic.CreateView):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Добавить дополнительный доход'
         return context
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class UpdateAdditional(LoginRequiredMixin,generic.UpdateView):
     model = models.AdditionalIncome

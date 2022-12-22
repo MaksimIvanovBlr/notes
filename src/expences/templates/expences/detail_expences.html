@@ -7,7 +7,10 @@
 <ul>
 <li>Название: <b>{{object.name}}</b></li>
 <li>Сумма: <b>{{object.value}}</b>BYN</li>
+{% if object.description %}
 <li>Описание: <b>{{object.description|default:'Отсутствует'}}</b></li>
+{% endif %}
+
 <br><br>
 <ul>
 {% endblock body %}

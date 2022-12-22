@@ -6,11 +6,11 @@
 {% block body %}
 <ul>
     <br>
-    <li><a href="{% url 'expences:list' %}"><b>Список расходов</b></a></li>
+    <li><a href="{% url 'expences:list' %}"><b>Расходы</b></a></li>
     <br>
-    <li><a href="{% url 'expences:list-s' %}"><b>Список доходов</b></a></li>
+    <li><a href="{% url 'expences:list-s' %}"><b>Зарплата</b></a></li>
     <br>
-    <li><a href="{% url 'expences:list-a' %}"><b>Список дополнительных доходов</b></a></li>
+    <li><a href="{% url 'expences:list-a' %}"><b>Дополнительные доходы</b></a></li>
     <br>
     <br>
     <li><a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}"><b>Изменить дневной расход</b></a></li>
@@ -29,7 +29,7 @@
 {% endif %}
 <h3><a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}">Резерв: {{ reserv }} руб</a></h3>
 <h3>Прогнозируемый остаток на карте: {{ ost }} руб </h3>
-{% comment %} <h3>!!!: {{ money_to_salary }}руб(расчетный остаток)</h3> {% endcomment %}
+<h3>Дополнительный доход за текущий месяц: {{ additional }}руб(расчетный остаток)</h3>
 <br>
 <br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
