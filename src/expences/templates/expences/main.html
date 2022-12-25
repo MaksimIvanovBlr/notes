@@ -39,10 +39,9 @@
     <p><button type="submit" class="btn btn-success">Рассчитать резерв</button></p>
     {% comment %} <input type="hidden" name="book_pk" value="{{books.pk}}">{% endcomment %}
 </form>
-<br>
-<h5>!!!!! {{balance}}<h5>
-<h5>difference {{difference}}</h5>
-<h5>real {{real_reserv}}</h5>
+{% comment %} <h5>!!!!! {{balance}}<h5> {% endcomment %}
+<h5>Разница с реальным счетом: {{differenc}}</h5>
+<h5>Резерв: {{real_reserv}}</h5>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock body %}
 

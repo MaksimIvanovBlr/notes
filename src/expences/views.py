@@ -70,9 +70,12 @@ def expences_view(request):
         balance = request.POST.get('balance')
         context['balance'] = balance
         differenc = int(balance) - int(ost)
-        context['difference'] = differenc
+        context['differenc'] = differenc
         resrv  = request.user.user_reserv.value + differenc
         context['real_reserv'] = resrv
+        user_res = request.user.user_reserv
+        user_res.value = resrv
+        user_res.save()
 
 
     return render(
