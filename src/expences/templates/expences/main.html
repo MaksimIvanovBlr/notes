@@ -32,6 +32,17 @@
 <h3>Дополнительный доход за текущий месяц: {{ additional }}руб(расчетный остаток)</h3>
 <br>
 <br>
+<form action="{% url 'expences:main' %}" method="post">
+    {% csrf_token %}
+    <p>Реальный баланс карты:</p>
+    <p>Сумма:<input type="number" name="balance" value="0" min="1"></p>
+    <p><button type="submit" class="btn btn-success">Рассчитать резерв</button></p>
+    {% comment %} <input type="hidden" name="book_pk" value="{{books.pk}}">{% endcomment %}
+</form>
+<br>
+<h5>!!!!! {{balance}}<h5>
+<h5>difference {{difference}}</h5>
+<h5>real {{real_reserv}}</h5>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock body %}
 

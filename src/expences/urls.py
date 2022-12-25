@@ -9,7 +9,8 @@ urlpatterns = [
     path("detail/<int:pk>", views.DetailExpences.as_view(), name="detail"),
     path("delete/<int:pk>", views.DeleteExpences.as_view(), name="delete"),
     path("list/", views.ListExpences.as_view(), name="list"),
-    path("", views.ExpencesView.as_view(), name="main"),
+    # path("", views.ExpencesView.as_view(), name="main"),
+    path("", views.expences_view, name="main"),
 
 
     path("create-s",views.CreateIncome.as_view(), name="create-s"),
