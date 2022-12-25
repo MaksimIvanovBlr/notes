@@ -29,19 +29,19 @@
 {% endif %}
 <h3><a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}">Резерв: {{ reserv }} руб</a></h3>
 <h3>Прогнозируемый остаток на карте: {{ ost }} руб </h3>
-<h3>Дополнительный доход за текущий месяц: {{ additional }}руб(расчетный остаток)</h3>
+<h3>Дополнительный доход за текущий месяц: {{ additional }}руб</h3>
 <br>
 <br>
 <form action="{% url 'expences:main' %}" method="post">
     {% csrf_token %}
     <p>Реальный баланс карты:</p>
-    <p>Сумма:<input type="number" name="balance" value="0" min="1"></p>
+    <p>Сумма:<input type="number" name="balance" value="" min="1"></p>
     <p><button type="submit" class="btn btn-success">Рассчитать резерв</button></p>
-    {% comment %} <input type="hidden" name="book_pk" value="{{books.pk}}">{% endcomment %}
 </form>
-{% comment %} <h5>!!!!! {{balance}}<h5> {% endcomment %}
-<h5>Разница с реальным счетом: {{differenc}}</h5>
+{% if difference %}
+<h5>Разница с реальным счетом: {{difference}}</h5>
 <h5>Резерв: {{real_reserv}}</h5>
+{% endif %}
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock body %}
 

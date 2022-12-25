@@ -8,81 +8,46 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.views.generic.edit import FormMixin
+from django.contrib.auth.decorators import login_required
 
-
-
-# class ExpencesView(LoginRequiredMixin,date_day_to.ToSalary, generic.TemplateView):
-#     template_name = "expences/main.html"
-#     login_url = reverse_lazy('login')
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         x = date_day_to.ToSalary()
-#         context["days_to_salary"] = x.days_to_salary
-#         context["money_to_salary"] = self.request.user.user_per_day.value * x.days_to_salary
-#         context["reserv"] = self.request.user.user_reserv.value
-#         not_paid= models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status=False))
-#         sum_of_not_paid = 0 
-#         for val in not_paid:
-#             sum_of_not_paid += val.value
-#         context["not_paid"] = sum_of_not_paid
-#         context["ost"] = (self.request.user.user_per_day.value * x.days_to_salary) + self.request.user.user_reserv.value + sum_of_not_paid
-#         additional = models.AdditionalIncome.objects.filter(Q(user = self.request.user) & Q(date__year=date_day_to.date.year,
-#     date__month=date_day_to.date.month))
-#         sum_of_additional = 0
-#         for add in additional:
-#             sum_of_additional += add.value
-#         context["additional"] = sum_of_additional
-#         # income = models.Salary.objects.filter(Q(user = self.request.user)& Q(status=True))
-#         # print(income)
-#         # out = models.IncomeAndExpediture.objects.filter(Q(user = self.request.user) & Q(status = False))
-#         # print(out)
-#         # sum_of_income = 0 
-#         # for val in income:
-#         #     sum_of_income += val.value
-#         # sum_of_out = 0
-#         # for val in out:
-#         #     sum_of_out += val.value
-#         # context['reserv'] = sum_of_income - sum_of_out - self.request.user.user_per_day.value * x.days_to_salary
-#         # print (sum_of_income)
-#         return context
-    
+@login_required
 def expences_view(request):
-    context = {}
-    x = date_day_to.ToSalary()
-    context["days_to_salary"] = x.days_to_salary
-    context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
-    context["reserv"] = request.user.user_reserv.value
-    not_paid= models.IncomeAndExpediture.objects.filter(Q(user = request.user) & Q(status=False))
-    sum_of_not_paid = 0 
-    for val in not_paid:
-        sum_of_not_paid += val.value
-    context["not_paid"] = sum_of_not_paid
-    ost = (request.user.user_per_day.value * x.days_to_salary) + request.user.user_reserv.value + sum_of_not_paid
-    context["ost"] = ost
-    additional = models.AdditionalIncome.objects.filter(Q(user = request.user) & Q(date__year=date_day_to.date.year,
-    date__month=date_day_to.date.month))
-    sum_of_additional = 0
-    for add in additional:
-        sum_of_additional += add.value
-    context["additional"] = sum_of_additional
+        context = {}
+        x = date_day_to.ToSalary()
+        context["days_to_salary"] = x.days_to_salary
+        context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
+        context["reserv"] = request.user.user_reserv.value
+        not_paid= models.IncomeAndExpediture.objects.filter(Q(user = request.user) & Q(status=False))
+        sum_of_not_paid = 0 
+        for val in not_paid:
+            sum_of_not_paid += val.value
+        context["not_paid"] = sum_of_not_paid
+        ost = (request.user.user_per_day.value * x.days_to_salary) + request.user.user_reserv.value + sum_of_not_paid
+        context["ost"] = ost
+        additional = models.AdditionalIncome.objects.filter(Q(user = request.user) & Q(date__year=date_day_to.date.year,
+        date__month=date_day_to.date.month))
+        sum_of_additional = 0
+        for add in additional:
+            sum_of_additional += add.value
+        context["additional"] = sum_of_additional
 
-    if request.method == 'POST':
-        balance = request.POST.get('balance')
-        context['balance'] = balance
-        differenc = int(balance) - int(ost)
-        context['differenc'] = differenc
-        resrv  = request.user.user_reserv.value + differenc
-        context['real_reserv'] = resrv
-        user_res = request.user.user_reserv
-        user_res.value = resrv
-        user_res.save()
+        if request.method == 'POST':
+            balance = request.POST.get('balance')
+            context['balance'] = balance
+            difference = int(balance) - int(ost)
+            context['difference'] = difference
+            resrv  = request.user.user_reserv.value + difference
+            context['real_reserv'] = resrv
+            user_res = request.user.user_reserv
+            user_res.value = resrv
+            user_res.save()
 
 
-    return render(
-        request=request,
-        template_name="expences/main.html",
-        context=context
-    )
+        return render(
+            request=request,
+            template_name="expences/main.html",
+            context=context
+        )
 
 # расходы
 
