@@ -15,16 +15,22 @@ from django.contrib.auth.decorators import login_required
 def expences_view(request):
     context = {}
     x = date_day_to.ToSalary()
+    # дни до зарплаты
     context["days_to_salary"] = x.days_to_salary
+    # сумма на карте до конца месяца на ежедневные расходы
     context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
+    # сумма резерва на карте
     context["reserv"] = request.user.user_reserv.value
+    # не облаченные услуги
     not_paid = models.IncomeAndExpediture.objects.filter(Q(user=request.user) & Q(status=False))
     sum_of_not_paid = 0
     for val in not_paid:
         sum_of_not_paid += val.value
     context["not_paid"] = sum_of_not_paid
+    # ожидаемый остаток на карте(исходя из данных)
     ost = (request.user.user_per_day.value * x.days_to_salary) + request.user.user_reserv.value + sum_of_not_paid
     context["ost"] = ost
+    # дополнителнительные доходы за текущий месяц
     additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
                                                                                  date__month=date_day_to.date.month))
     sum_of_additional = 0
@@ -32,6 +38,11 @@ def expences_view(request):
         sum_of_additional += add.value
     context["additional"] = sum_of_additional
 
+    #  основной доход за расчетный месяц
+    #...................................
+
+
+    # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно ввести в расчет аванс)
     if request.method == 'POST':
         balance = request.POST.get('balance')
         context['balance'] = balance
