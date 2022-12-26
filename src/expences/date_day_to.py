@@ -37,3 +37,4 @@ class CalculatedMonth():
 
     date_calc_z = datetime(date.year, date.month, 20)
     date_calc_a = datetime(date.year, date.month, 11)
+    

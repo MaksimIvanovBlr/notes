@@ -52,3 +52,9 @@
   main > .container {
     padding: 60px 15px 0;
   }
+
+
+  a.text {
+    text-decoration: none;
+    color: #666;
+  }
