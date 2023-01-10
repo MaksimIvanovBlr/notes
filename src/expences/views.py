@@ -45,6 +45,17 @@ def expences_view(request):
         sum_of_salary += salary.value
     context["salary_for_mounth"] = sum_of_salary
 
+
+
+    # автоматическое обновление статуса рсходов после получения ЗП(когда до ЗП 0(ноль) дней)
+    #но в этот день, получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
+    if x.days_to_salary == 0:
+        all_expediture = models.IncomeAndExpediture.objects.filter(user = request.user)
+        print(all_expediture)
+        for expediture in all_expediture:
+            expediture.status = False
+            expediture.save()
+
     #  основной доход за расчетный месяц
     #...................................
 

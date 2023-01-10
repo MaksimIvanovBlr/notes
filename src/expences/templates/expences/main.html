@@ -27,6 +27,12 @@
         <td>Дней до зарплаты: </td>
         <td>{{ days_to_salary }}</td>
     </tr>
+    {% comment %} {% if days_to_salary == 0 %}
+    <tr>
+        <td>Рассчитать резерв(ЗП - расходы)</td>
+        <td><button type="submit" class="btn btn-secondary">Рассчитать резерв</button></td>
+    </tr>
+    {% endif %} {% endcomment %}
     <tr>
         <td>На ежедневыне расходы до конца месяца: </td>
         <td>{{ money_to_salary }}руб(расчетный остаток)</td>

@@ -2,6 +2,7 @@ from django import forms
 from . import models
 
 
+
 class ExpencesForm(forms.ModelForm):
     class Meta:
         model = models.IncomeAndExpediture
@@ -17,7 +18,7 @@ class SalaryForm(forms.ModelForm):
 class PerDayForm(forms.ModelForm):
     class Meta:
         model = models.PerDay
-        fields = ('value',)
+        fields = ('value','day',)
 
 
 class ReservForm(forms.ModelForm):
