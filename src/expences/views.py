@@ -51,10 +51,19 @@ def expences_view(request):
     #но в этот день, получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
     if x.days_to_salary == 0:
         all_expediture = models.IncomeAndExpediture.objects.filter(user = request.user)
-        print(all_expediture)
         for expediture in all_expediture:
             expediture.status = False
             expediture.save()
+        user_salary = models.Salary.objects.filter(Q(user = request.user) & Q(name = 'зарплата') & Q(status = True))
+        if user_salary:
+            request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (request.user.user_per_day.value * 31)
+            request.user.user_reserv.save()
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+        else:
+            print('################################################')
+        print(user_salary)
+
+
 
     #  основной доход за расчетный месяц
     #...................................
