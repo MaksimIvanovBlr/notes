@@ -21,7 +21,7 @@ def expences_view(request):
     context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
     # сумма резерва на карте
     context["reserv"] = request.user.user_reserv.value
-    # не облаченные услуги
+    # не оплаченные услуги
     not_paid = models.IncomeAndExpediture.objects.filter(Q(user=request.user) & Q(status=False))
     sum_of_not_paid = 0
     for val in not_paid:
@@ -37,6 +37,13 @@ def expences_view(request):
     for add in additional:
         sum_of_additional += add.value
     context["additional"] = sum_of_additional
+
+    #временно фильтровать по статусу. далее автоматически
+    salary_for_mounth = models.Salary.objects.filter(Q(user = request.user) & Q(status = True))
+    sum_of_salary = 0
+    for salary in salary_for_mounth:
+        sum_of_salary += salary.value
+    context["salary_for_mounth"] = sum_of_salary
 
     #  основной доход за расчетный месяц
     #...................................
