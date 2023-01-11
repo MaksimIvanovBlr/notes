@@ -81,7 +81,7 @@ def expences_view(request):
         context=context
     )
 
-
+@login_required
 def recalculation(request):
     context = {}
     if request.method == "POST":

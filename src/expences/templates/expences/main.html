@@ -4,10 +4,6 @@
 
 
 {% block body %}
-    {% if days_to_salary == 0 %}
-<h5>Внимание! В день получения ЗП(Когда вы видите эту запись) оплачивать проводить оплату услуг(или менять резерв) не рекомендуется. Резерв будет прерасчитан автоматически</h5>
-<h5>Веб-приложение в процессе разработки. В дальнейшем мы это исправим</h5>
-    {% endif %}
 
 <a href="{% url 'expences:list' %}"><button type="button" class="btn btn-dark"><b>Расходы</b></button></a><br>
 <a href="{% url 'expences:list-s' %}"><button type="button" class="btn btn-dark"><b>Зарплата</b></button></a><br>
