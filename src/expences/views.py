@@ -50,6 +50,7 @@ def expences_view(request):
     # автоматическое обновление статуса рсходов после получения ЗП(когда до ЗП 0(ноль) дней)
     #но в этот день, получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
     if x.days_to_salary == 0:
+        # 
         all_expediture = models.IncomeAndExpediture.objects.filter(user = request.user)
         for expediture in all_expediture:
             expediture.status = False
@@ -62,11 +63,6 @@ def expences_view(request):
         else:
             print('################################################')
         print(user_salary)
-
-
-
-    #  основной доход за расчетный месяц
-    #...................................
 
 
     # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно ввести в расчет аванс)
@@ -88,8 +84,49 @@ def expences_view(request):
     )
 
 
-# расходы
+def recalculation(request):
+    context = {}
+    if request.method == "POST":
 
+        salary_for_mounth = models.Salary.objects.filter(Q(user = request.user) & Q(status = True))
+        sum_of_salary = 0
+        for salary in salary_for_mounth:
+            sum_of_salary += salary.value
+
+
+        x = date_day_to.ToSalary()
+        if x.days_to_salary != 0:
+            days_to_next_salary = x.days_to_salary
+        else: 
+            days_to_next_salary = 31
+
+
+        all_expediture = models.IncomeAndExpediture.objects.filter(user = request.user)
+        for expediture in all_expediture:
+            expediture.status = False
+            expediture.save()
+
+        #  сумма неоплаченных ежемесячных платежей       
+        not_paid = models.IncomeAndExpediture.objects.filter(Q(user=request.user) & Q(status=False))
+        sum_of_not_paid = 0
+        for val in not_paid:
+            sum_of_not_paid += val.value
+        context["not_paid"] = sum_of_not_paid
+
+        request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (request.user.user_per_day.value * days_to_next_salary)
+        request.user.user_reserv.save()
+        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+
+    return render(
+        request=request,
+        context= context,
+        template_name='expences/recalculation.html'
+
+    )
+
+
+
+# расходы
 
 class CreateExpences(LoginRequiredMixin, generic.CreateView):
     model = models.IncomeAndExpediture

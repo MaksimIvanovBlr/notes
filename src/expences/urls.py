@@ -11,6 +11,7 @@ urlpatterns = [
     path("list/", views.ListExpences.as_view(), name="list"),
     # path("", views.ExpencesView.as_view(), name="main"),
     path("", views.expences_view, name="main"),
+    path("recalculation/", views.recalculation, name="recalculation"),
 
     path("create-s", views.CreateIncome.as_view(), name="create-s"),
     path("update-s/<int:pk>", views.UpdateIncome.as_view(), name="update-s"),

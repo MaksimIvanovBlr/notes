@@ -13,7 +13,8 @@
 <a href="{% url 'expences:list-s' %}"><button type="button" class="btn btn-dark"><b>Зарплата</b></button></a><br>
 <a href="{% url 'expences:list-a' %}"><button type="button" class="btn btn-dark"><b>Дополнительные доходы</b></button></a><br>
 <a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}" class="text"><button type="button" class="btn btn-dark"><b>Изменить дневной расход</b></button></a><br>
-<a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}"><button type="button" class="btn btn-dark"><b>Изменить резерв</b></button></a><br>
+<a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}"><button type="button" class="btn btn-dark"><b>Изменить резерв</b></button></a><br><br>
+<a href="{% url 'expences:recalculation' %}"><button type="button" class="btn btn-dark"><b>Пересчитать резерв(месячный)</b></button></a><br>
 <br><br>
 
 <table class="table table-dark table-striped">
@@ -67,6 +68,7 @@
 <h5>Разница с реальным счетом: {{difference}}</h5>
 <h5>Резерв: {{real_reserv}}</h5>
 {% endif %}
+
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 {% endblock body %}
 
