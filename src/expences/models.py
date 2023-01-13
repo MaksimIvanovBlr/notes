@@ -19,15 +19,12 @@ class PerDay(models.Model):
     )
     # поле, которое будет заполняться для рассчета ЗП(день получения зп)
     day = models.DateField(
-        verbose_name='День зарплаты',
-        blank=True,
-        null=True
+        verbose_name='День зарплаты'
+
     )
     # "гaлочка" для указания способа расчета. расчет за полный месяц(аванс+ЗП) или по мере поступления денег на карту
     salary_method = models.BooleanField(
         verbose_name='Расчет за полный месяц',
-        blank=True,
-        null=True
     )
 
 

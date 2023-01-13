@@ -11,6 +11,13 @@ from django.views.generic.edit import FormMixin
 from django.contrib.auth.decorators import login_required
 
 
+class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
+    model = models.PerDay
+    form_class = forms.PerDayForm
+    success_url = reverse_lazy('expences:main')
+    login_url = reverse_lazy('login')
+    template_name = 'expences/add_base_info.html'
+
 @login_required
 def expences_view(request):
     context = {}

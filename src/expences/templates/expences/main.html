@@ -4,7 +4,7 @@
 
 
 {% block body %}
-
+{% if user.user_per_day.value and user.user_per_day.day and user.user_per_day.salary_method %}
 <a href="{% url 'expences:list' %}"><button type="button" class="btn btn-dark"><b>Расходы</b></button></a><br>
 <a href="{% url 'expences:list-s' %}"><button type="button" class="btn btn-dark"><b>Зарплата</b></button></a><br>
 <a href="{% url 'expences:list-a' %}"><button type="button" class="btn btn-dark"><b>Дополнительные доходы</b></button></a><br>
@@ -66,6 +66,18 @@
 {% endif %}
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+{% else %}
+<h1>Huiak</h1>
+<form action="{% url 'expences:main' %}" method="post">
+    {% csrf_token %}
+    <p>Для использования сервиса необходимо указать дополнительные данные:</p>
+    <p>Дневной расход:  <input type="number" name="day_expences" value="" min="0"></p>
+    <p>Расчетный день(день ЗП) <input type="number" name="day_of_salary" value="" min="0"></p>
+    <p>Метод расчета(за полный месяц):  <input type="number" name="balance" value="" min="0"></p>
+    <p><button type="submit" class="btn btn-secondary">Рассчитать резерв</button></p>
+</form>
+<p><a href = "{% url 'expences:create-base-info' %}">Или перейдите по ссылке </a><p>
+{% endif %}
 {% endblock body %}
 
 

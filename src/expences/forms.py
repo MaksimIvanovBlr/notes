@@ -17,7 +17,7 @@ class SalaryForm(forms.ModelForm):
 class PerDayForm(forms.ModelForm):
     class Meta:
         model = models.PerDay
-        fields = ('value', 'day',)
+        fields = ('value', 'day', 'salary_method')
 
 
 class ReservForm(forms.ModelForm):
