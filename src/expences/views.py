@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . import models, forms
 from django.views import generic
 from django.urls import reverse_lazy
@@ -23,73 +23,81 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 
 @login_required
 def expences_view(request):
-    context = {}
-    x = date_day_to.ToSalary()
-    # дни до зарплаты
-    context["days_to_salary"] = x.days_to_salary
-    # сумма на карте до конца месяца на ежедневные расходы
-    context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
-    # сумма резерва на карте
-    context["reserv"] = request.user.user_reserv.value
-    # не оплаченные услуги
-    not_paid = models.IncomeAndExpediture.objects.filter(Q(user=request.user) & Q(status=False))
-    sum_of_not_paid = 0
-    for val in not_paid:
-        sum_of_not_paid += val.value
-    context["not_paid"] = sum_of_not_paid
-    # ожидаемый остаток на карте(исходя из данных)
-    ost = (request.user.user_per_day.value * x.days_to_salary) + request.user.user_reserv.value + sum_of_not_paid
-    context["ost"] = ost
-    # дополнителнительные доходы за текущий месяц
-    additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
-                                                                                 date__month=date_day_to.date.month))
-    sum_of_additional = 0
-    for add in additional:
-        sum_of_additional += add.value
-    context["additional"] = sum_of_additional
+    # try:
+        context = {}
+        x = date_day_to.ToSalary()
+        # дни до зарплаты
+        context["days_to_salary"] = x.days_to_salary
+        # сумма на карте до конца месяца на ежедневные расходы
+        context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
+        # сумма резерва на карте
+        reserv, created = models.Reserv.objects.get_or_create(
+                user=request.user,
+                defaults={'value': 0}
+            )
+        context["reserv"] = reserv.value
+        # не оплаченные услуги
+        not_paid = models.IncomeAndExpediture.objects.filter(Q(user=request.user) & Q(status=False))
+        sum_of_not_paid = 0
+        for val in not_paid:
+            sum_of_not_paid += val.value
+        context["not_paid"] = sum_of_not_paid
+        # ожидаемый остаток на карте(исходя из данных)
+        ost = (request.user.user_per_day.value * x.days_to_salary) + request.user.user_reserv.value + sum_of_not_paid
+        context["ost"] = ost
+        # дополнителнительные доходы за текущий месяц
+        additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
+                                                                                    date__month=date_day_to.date.month))
+        sum_of_additional = 0
+        for add in additional:
+            sum_of_additional += add.value
+        context["additional"] = sum_of_additional
 
-    # временно фильтровать по статусу. далее автоматически
-    salary_for_mounth = models.Salary.objects.filter(Q(user=request.user) & Q(status=True))
-    sum_of_salary = 0
-    for salary in salary_for_mounth:
-        sum_of_salary += salary.value
-    context["salary_for_mounth"] = sum_of_salary
+        # временно фильтровать по статусу. далее автоматически
+        salary_for_mounth = models.Salary.objects.filter(Q(user=request.user) & Q(status=True))
+        sum_of_salary = 0
+        for salary in salary_for_mounth:
+            sum_of_salary += salary.value
+        context["salary_for_mounth"] = sum_of_salary
 
-    # автоматическое обновление статуса рсходов после получения ЗП(когда до ЗП 0(ноль) дней) но в этот день,
-    # получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
-    if x.days_to_salary == 0:
-        # 
-        all_expediture = models.IncomeAndExpediture.objects.filter(user=request.user)
-        for expediture in all_expediture:
-            expediture.status = False
-            expediture.save()
-        user_salary = models.Salary.objects.filter(Q(user=request.user) & Q(name='зарплата') & Q(status=True))
-        if user_salary:
-            request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (request.user.user_per_day.value * 31)
-            request.user.user_reserv.save()
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-        else:
-            print('################################################')
-        print(user_salary)
+        # автоматическое обновление статуса рсходов после получения ЗП(когда до ЗП 0(ноль) дней) но в этот день,
+        # получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
+        if x.days_to_salary == 0:
+            # 
+            all_expediture = models.IncomeAndExpediture.objects.filter(user=request.user)
+            for expediture in all_expediture:
+                expediture.status = False
+                expediture.save()
+            user_salary = models.Salary.objects.filter(Q(user=request.user) & Q(name='зарплата') & Q(status=True))
+            if user_salary:
+                request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (request.user.user_per_day.value * 31)
+                request.user.user_reserv.save()
+                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            else:
+                print('################################################')
+            print(user_salary)
 
-    # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
-    # ввести в расчет аванс)
-    if request.method == 'POST':
-        balance = request.POST.get('balance')
-        context['balance'] = balance
-        difference = int(balance) - int(ost)
-        context['difference'] = difference
-        resrv = request.user.user_reserv.value + difference
-        context['real_reserv'] = resrv
-        user_res = request.user.user_reserv
-        user_res.value = resrv
-        user_res.save()
+        # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
+        # ввести в расчет аванс)
+        if request.method == 'POST':
+            balance = request.POST.get('balance')
+            context['balance'] = balance
+            difference = int(balance) - int(ost)
+            context['difference'] = difference
+            resrv = request.user.user_reserv.value + difference
+            context['real_reserv'] = resrv
+            user_res = request.user.user_reserv
+            user_res.value = resrv
+            user_res.save()
 
-    return render(
-        request=request,
-        template_name="expences/main.html",
-        context=context
-    )
+        return render(
+            request=request,
+            template_name="expences/main.html",
+            context=context
+        )
+    # except:  
+    #     return redirect('expences:create-base-info')
+
 
 @login_required
 def recalculation(request):
