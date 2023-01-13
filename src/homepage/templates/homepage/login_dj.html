@@ -42,6 +42,10 @@
 <input  type="hidden" name="next" value="{{ next }}">
 </form>
 <br>
+<div>
+    <a href="{% url 'user:user-register' %}"><button type="button" class="btn btn-dark"><b>Зарегистрироваться</b></button></a><br>
+</div>
+<br>
 </div>
 {% comment %} <p  class="btn btn-warning"> <a href= "{% url 'custom_user:registration' %}" > Зарегистрироваться </a></p><br> {% endcomment %}
 {# Assumes you set up the password_reset view in your URLconf #}

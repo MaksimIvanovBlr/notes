@@ -17,6 +17,9 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy('expences:main')
     login_url = reverse_lazy('login')
     template_name = 'expences/add_base_info.html'
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 @login_required
 def expences_view(request):

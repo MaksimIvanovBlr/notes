@@ -11,5 +11,9 @@ urlpatterns = [
     path("", include('homepage.urls', namespace='homepage')),
     path("budgeting/", include('budgeting.urls', namespace='budgeting')),
     path("expences/", include('expences.urls'), name="expences"),
-    path("notes/", include('notes.urls'), name="notes")
+    path("notes/", include('notes.urls'), name="notes"),
+    path("user/", include('user_register.urls'), name="user")
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

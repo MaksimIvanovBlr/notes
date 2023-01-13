@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     "homepage",
     "budgeting",
     "notes",
-    "expences"
+    "expences",
+    "user_register"
 ]
 
 MIDDLEWARE = [
