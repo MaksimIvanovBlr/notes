@@ -23,7 +23,7 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 
 @login_required
 def expences_view(request):
-    # try:
+    try:
         context = {}
         x = date_day_to.ToSalary()
         # дни до зарплаты
@@ -35,6 +35,9 @@ def expences_view(request):
                 user=request.user,
                 defaults={'value': 0}
             )
+        if created:
+            context['created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
+            context['attention'] = '!'
         context["reserv"] = reserv.value
         # не оплаченные услуги
         not_paid = models.IncomeAndExpediture.objects.filter(Q(user=request.user) & Q(status=False))
@@ -72,10 +75,6 @@ def expences_view(request):
             if user_salary:
                 request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (request.user.user_per_day.value * 31)
                 request.user.user_reserv.save()
-                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            else:
-                print('################################################')
-            print(user_salary)
 
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
         # ввести в расчет аванс)
@@ -95,8 +94,8 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-    # except:  
-    #     return redirect('expences:create-base-info')
+    except:  
+        return redirect('expences:create-base-info')
 
 
 @login_required
