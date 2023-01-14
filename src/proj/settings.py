@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "homepage",
-    "budgeting",
     "notes",
     "expences",
     "user_register"

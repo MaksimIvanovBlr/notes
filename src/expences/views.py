@@ -2,12 +2,9 @@ from django.shortcuts import render, redirect
 from . import models, forms
 from django.views import generic
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from . import date_day_to
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
 from django.db.models import Q
-from django.views.generic.edit import FormMixin
 from django.contrib.auth.decorators import login_required
 
 
@@ -17,11 +14,13 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy('expences:main')
     login_url = reverse_lazy('login')
     template_name = 'expences/add_base_info.html'
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-@login_required
+
+@login_required(login_url='login')
 def expences_view(request):
     try:
         context = {}
@@ -32,11 +31,12 @@ def expences_view(request):
         context["money_to_salary"] = request.user.user_per_day.value * x.days_to_salary
         # сумма резерва на карте
         reserv, created = models.Reserv.objects.get_or_create(
-                user=request.user,
-                defaults={'value': 0}
-            )
+            user=request.user,
+            defaults={'value': 0}
+        )
         if created:
-            context['created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
+            context[
+                'created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
             context['attention'] = '!'
         context["reserv"] = reserv.value
         # не оплаченные услуги
@@ -50,7 +50,7 @@ def expences_view(request):
         context["ost"] = ost
         # дополнителнительные доходы за текущий месяц
         additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
-                                                                                    date__month=date_day_to.date.month))
+                                                                                     date__month=date_day_to.date.month))
         sum_of_additional = 0
         for add in additional:
             sum_of_additional += add.value
@@ -73,7 +73,8 @@ def expences_view(request):
                 expediture.save()
             user_salary = models.Salary.objects.filter(Q(user=request.user) & Q(name='зарплата') & Q(status=True))
             if user_salary:
-                request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (request.user.user_per_day.value * 31)
+                request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (
+                            request.user.user_per_day.value * 31)
                 request.user.user_reserv.save()
 
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
@@ -94,11 +95,11 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-    except:  
+    except:
         return redirect('expences:create-base-info')
 
 
-@login_required
+@login_required(login_url='login')
 def recalculation(request):
     context = {}
     if request.method == "POST":
@@ -127,9 +128,8 @@ def recalculation(request):
         context["not_paid"] = sum_of_not_paid
 
         request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (
-                    request.user.user_per_day.value * days_to_next_salary)
+                request.user.user_per_day.value * days_to_next_salary)
         request.user.user_reserv.save()
-        print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
     return render(
         request=request,

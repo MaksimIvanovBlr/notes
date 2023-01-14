@@ -26,15 +26,3 @@ class ToSalary():
 
         return day.days
 
-
-# def calculated_month():
-#     global date
-#     date_calc = datetime(date.year, date.month, 11)
-
-
-# class CalculatedMonth():
-#     date = datetime.now()
-
-#     date_calc_z = datetime(date.year, date.month, 20)
-#     date_calc_a = datetime(date.year, date.month, 11)
-    
