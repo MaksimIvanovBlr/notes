@@ -10,6 +10,8 @@ date = datetime.now()
 
 class ToSalary():
     now_date = datetime.now()
+    #for testing
+    # now_date = datetime(2023,1,11) 
     some_date2 = datetime(now_date.year, now_date.month, 11)
 
     if now_date.month == 12:

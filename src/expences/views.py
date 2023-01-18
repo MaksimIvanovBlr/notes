@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from . import date_day_to
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
@@ -35,8 +36,7 @@ def expences_view(request):
             defaults={'value': 0}
         )
         if created:
-            context[
-                'created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
+            context['created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
             context['attention'] = '!'
         context["reserv"] = reserv.value
         # не оплаченные услуги
@@ -95,7 +95,7 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-    except:
+    except User.user_per_day.RelatedObjectDoesNotExist:
         return redirect('expences:create-base-info')
 
 
