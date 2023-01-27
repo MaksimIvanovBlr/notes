@@ -64,6 +64,7 @@ def expences_view(request):
         real_user_balance = request.user.user_per_day
         buffer_money = int(real_user_balance.balance) - int(ost)
         context['real_balance'] = real_user_balance.balance
+        context['buffer_money'] = buffer_money
         # дополнителнительные доходы за текущий месяц
         additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
                                                                                      date__month=date_day_to.date.month))
