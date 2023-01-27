@@ -7,6 +7,8 @@ from . import date_day_to
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from decimal import Decimal
+
 
 class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
     model = models.PerDay
@@ -22,7 +24,7 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 
 @login_required(login_url='login')
 def expences_view(request):
-    try:
+    # try:
         context = {}
         x = date_day_to.ToSalary()
         # дни до зарплаты
@@ -61,7 +63,9 @@ def expences_view(request):
         context["ost"] = ost
 
         # буферная сумма- разница между реальным балансом и прогнозируемым
-        # context['']
+        real_user_balance = request.user.user_per_day
+        buffer_money = int(real_user_balance.balance) - int(ost)
+        context['real_balance'] = real_user_balance.balance
         # дополнителнительные доходы за текущий месяц
         additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
                                                                                      date__month=date_day_to.date.month))
@@ -111,7 +115,8 @@ def expences_view(request):
             balance = request.POST.get('balance')
             difference = int(balance) - int(ost)
             context['difference'] = difference
-            context['real_balance'] = balance
+            real_user_balance.balance = balance
+            real_user_balance.save()
             resrv = request.user.user_reserv.value + difference
             context['real_reserv'] = resrv
             user_res = request.user.user_reserv
@@ -123,8 +128,8 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-    except User.user_per_day.RelatedOdjectDoesNotExist:
-        return redirect('expences:create-base-info')
+    # except User.user_per_day.RelatedOdjectDoesNotExist:
+    #     return redirect('expences:create-base-info')
 
 
 @login_required(login_url='login')
