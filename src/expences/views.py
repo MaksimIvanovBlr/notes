@@ -53,13 +53,15 @@ def expences_view(request):
             ost = (request.user.user_per_day.value * x.days_to_salary) + \
                 request.user.user_reserv.value + \
                 sum_of_not_paid + last_transfer[0].value
-            print(f'остаток:{ost}=до конца месяца:{request.user.user_per_day.value * x.days_to_salary}+резерв:{request.user.user_reserv.value}+неоплаченные:{sum_of_not_paid}+последняя транзакция:{last_transfer[0].value}')
 
         else:
             ost = (request.user.user_per_day.value * x.days_to_salary) + \
                 request.user.user_reserv.value + sum_of_not_paid
 
         context["ost"] = ost
+
+        # буферная сумма- разница между реальным балансом и прогнозируемым
+        # context['']
         # дополнителнительные доходы за текущий месяц
         additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
                                                                                      date__month=date_day_to.date.month))
@@ -94,18 +96,23 @@ def expences_view(request):
 
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
         # ввести в расчет аванс)
+        # if request.method == 'POST':
+        #     balance = request.POST.get('balance')
+        #     context['balance'] = balance
+        #     difference = int(balance) - int(ost)
+        #     context['difference'] = difference
+        #     resrv = request.user.user_reserv.value + difference
+        #     context['real_reserv'] = resrv
+        #     user_res = request.user.user_reserv
+        #     user_res.value = resrv
+        #     user_res.save()
+
         if request.method == 'POST':
             balance = request.POST.get('balance')
-            context['balance'] = balance
             difference = int(balance) - int(ost)
             context['difference'] = difference
-
-            last_transfer = models.Salary.objects.all().order_by('-id')[:1]
-            if last_transfer[0].name == 'аванс':
-                resrv = request.user.user_reserv.value + \
-                    difference - int(last_transfer[0].value)
-            else:
-                resrv = request.user.user_reserv.value + difference
+            context['real_balance'] = balance
+            resrv = request.user.user_reserv.value + difference
             context['real_reserv'] = resrv
             user_res = request.user.user_reserv
             user_res.value = resrv
