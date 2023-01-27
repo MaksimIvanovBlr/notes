@@ -7,10 +7,6 @@ from . import date_day_to
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-<<<<<<< HEAD
-=======
-from decimal import Decimal
->>>>>>> fc931300d237a50fdd77eef35a9110e0d0f8cfd4
 
 
 class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
@@ -100,19 +96,7 @@ def expences_view(request):
                     request.user.user_per_day.value * 31)
                 request.user.user_reserv.save()
 
-        # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
-        # ввести в расчет аванс)
-        # if request.method == 'POST':
-        #     balance = request.POST.get('balance')
-        #     context['balance'] = balance
-        #     difference = int(balance) - int(ost)
-        #     context['difference'] = difference
-        #     resrv = request.user.user_reserv.value + difference
-        #     context['real_reserv'] = resrv
-        #     user_res = request.user.user_reserv
-        #     user_res.value = resrv
-        #     user_res.save()
-
+        # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте
         if request.method == 'POST':
             balance = request.POST.get('balance')
             difference = int(balance) - int(ost)
@@ -130,10 +114,8 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-<<<<<<< HEAD
-        except User.user_per_day.RelatedObjectDoesNotExist:
-            return redirect('expences:create-base-info')
->>>>>>> fc931300d237a50fdd77eef35a9110e0d0f8cfd4
+    except User.user_per_day.RelatedObjectDoesNotExist:
+        return redirect('expences:create-base-info')
 
 
 @login_required(login_url='login')
