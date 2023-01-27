@@ -24,7 +24,7 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 
 @login_required(login_url='login')
 def expences_view(request):
-    # try:
+    try:
         context = {}
         x = date_day_to.ToSalary()
         # дни до зарплаты
@@ -98,19 +98,7 @@ def expences_view(request):
                     request.user.user_per_day.value * 31)
                 request.user.user_reserv.save()
 
-        # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте (!нужно дополнительно
-        # ввести в расчет аванс)
-        # if request.method == 'POST':
-        #     balance = request.POST.get('balance')
-        #     context['balance'] = balance
-        #     difference = int(balance) - int(ost)
-        #     context['difference'] = difference
-        #     resrv = request.user.user_reserv.value + difference
-        #     context['real_reserv'] = resrv
-        #     user_res = request.user.user_reserv
-        #     user_res.value = resrv
-        #     user_res.save()
-
+        # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте
         if request.method == 'POST':
             balance = request.POST.get('balance')
             difference = int(balance) - int(ost)
@@ -128,8 +116,8 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-    # except User.user_per_day.RelatedOdjectDoesNotExist:
-    #     return redirect('expences:create-base-info')
+    except User.user_per_day.RelatedOdjectDoesNotExist:
+        return redirect('expences:create-base-info')
 
 
 @login_required(login_url='login')
