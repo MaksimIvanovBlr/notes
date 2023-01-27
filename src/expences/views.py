@@ -63,7 +63,7 @@ def expences_view(request):
             sum_of_salary += salary.value
         context["salary_for_mounth"] = sum_of_salary
 
-        # автоматическое обновление статуса рсходов после получения ЗП(когда до ЗП 0(ноль) дней) но в этот день,
+        # автоматическое обновление статуса расходов после получения ЗП(когда до ЗП 0(ноль) дней) но в этот день,
         # получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
         if x.days_to_salary == 0:
             # 
@@ -82,9 +82,16 @@ def expences_view(request):
         if request.method == 'POST':
             balance = request.POST.get('balance')
             context['balance'] = balance
+            # last_transfer = models.Salary.objects.filter(Q(user=request.user) & Q(name='аванс'))
+            # print(last_transfer)
+            # if request.user.user_salary
             difference = int(balance) - int(ost)
             context['difference'] = difference
-            resrv = request.user.user_reserv.value + difference
+            last_transfer = models.Salary.objects.all().order_by('-id')[:1]
+            if last_transfer[0].name == 'аванс':
+                resrv = request.user.user_reserv.value + difference - int(last_transfer[0].value)
+            else:
+                resrv = request.user.user_reserv.value + difference
             context['real_reserv'] = resrv
             user_res = request.user.user_reserv
             user_res.value = resrv
