@@ -10,7 +10,6 @@
 
 {% if created %}
 <h5><strong>{{ created }}</strong></h5>
-<br><br>
 {% endif %}
 <a href="{% url 'expences:list' %}"><button type="button" class="btn btn-dark"><b><strong>{{attention}}</strong> Расходы</b></button></a><br>
 <a href="{% url 'expences:list-s' %}"><button type="button" class="btn btn-dark"><b><strong>{{attention}}</strong> Зарплата</b></button></a><br>
@@ -70,9 +69,7 @@
 <h5>Резерв: {{real_reserv}}</h5>
 {% endif %}
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-    {% endblock body %}
+{% endblock body %}
 
 
 
