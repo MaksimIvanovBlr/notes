@@ -50,9 +50,20 @@
     </tr>
     </a>
 
+{% if buffer_money != 0 %}
+    <tr>
+        <td>"Буфферные" деньги: </td>
+        <td>{{ buffer_money }} руб </td>
+    </tr>
+{% endif %}
+
     <tr>
         <td>Прогнозируемый остаток на карте: </td>
         <td>{{ ost }} руб </td>
+    </tr>
+    <tr>
+        <td>Действительный баланс карты: </td>
+        <td>{{ real_balance }} руб </td>
     </tr>
 
 </table>

@@ -26,6 +26,13 @@ class PerDay(models.Model):
     salary_method = models.BooleanField(
         verbose_name='Расчет за полный месяц',
     )
+    # реальный баланс карты
+    balance = models.DecimalField(
+        verbose_name='Реальный баланс карты',
+        max_digits=100,
+        decimal_places=2,
+        default=0
+    )
 
 
 # расходы
