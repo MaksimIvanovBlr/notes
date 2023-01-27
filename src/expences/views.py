@@ -2,11 +2,11 @@ from django.shortcuts import render, redirect
 from . import models, forms
 from django.views import generic
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from . import date_day_to
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.models import User
 
 class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
     model = models.PerDay
@@ -51,7 +51,10 @@ def expences_view(request):
         last_transfer = models.Salary.objects.all().order_by('-id')[:1]
         if last_transfer[0].name == 'аванс':
             ost = (request.user.user_per_day.value * x.days_to_salary) + \
-                request.user.user_reserv.value + sum_of_not_paid + last_transfer[0].value
+                request.user.user_reserv.value + \
+                sum_of_not_paid + last_transfer[0].value
+            print(f'остаток:{ost}=до конца месяца:{request.user.user_per_day.value * x.days_to_salary}+резерв:{request.user.user_reserv.value}+неоплаченные:{sum_of_not_paid}+последняя транзакция:{last_transfer[0].value}')
+
         else:
             ost = (request.user.user_per_day.value * x.days_to_salary) + \
                 request.user.user_reserv.value + sum_of_not_paid
@@ -113,7 +116,7 @@ def expences_view(request):
             template_name="expences/main.html",
             context=context
         )
-    except:
+    except User.user_per_day.RelatedOdjectDoesNotExist:
         return redirect('expences:create-base-info')
 
 
@@ -217,7 +220,8 @@ class ListExpences(LoginRequiredMixin, generic.ListView):
 
     # from_class = forms.ExpencesForms
     def get_queryset(self):
-        object_list = models.IncomeAndExpediture.objects.filter(user=self.request.user)
+        object_list = models.IncomeAndExpediture.objects.filter(
+            user=self.request.user)
         return object_list
 
     def get_context_data(self, **kwargs):
