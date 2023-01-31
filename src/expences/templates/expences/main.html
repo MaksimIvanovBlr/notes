@@ -29,7 +29,6 @@
     </tr>
     {% endif %}
     <tr>
-    if 
         <td>Дней до зарплаты: </td>
         <td>{{ days_to_salary }}</td>
     </tr>
@@ -66,6 +65,12 @@
         <td>Действительный баланс карты: </td>
         <td>{{ real_balance }} руб </td>
     </tr>
+    {% if not_used_additional %}
+    <tr>
+        <td>Неиспользованный дополнительный доход:</td>
+        <td>{{not_used_additional}}</td>
+    </tr>
+    {% endif %}
 
 </table>
 

@@ -29,4 +29,4 @@ class ReservForm(forms.ModelForm):
 class AdditionalIncomeForm(forms.ModelForm):
     class Meta:
         model = models.AdditionalIncome
-        fields = ('name', 'value')
+        fields = ('name', 'value', 'status')

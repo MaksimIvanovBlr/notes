@@ -47,16 +47,31 @@ def expences_view(request):
         for val in not_paid:
             sum_of_not_paid += val.value
         context["not_paid"] = sum_of_not_paid
+
+        # дополнителнительные доходы за текущий месяц
+        additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
+                                                                                     date__month=date_day_to.date.month))
+        sum_of_additional = 0
+        for add in additional:
+            sum_of_additional += add.value
+        context["additional"] = sum_of_additional
+
+        # сумма дополнительных доходов, которые еще не использованны, но все еще на карте
+        not_used_additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(status=True))
+        sum_of_not_used_additional = 0
+        for not_used in not_used_additional:
+            sum_of_not_used_additional += not_used.value
+        context['not_used_additional'] = sum_of_not_used_additional
+
         # ожидаемый остаток на карте(исходя из данных)
         last_transfer = models.Salary.objects.all().order_by('-id')[:1]
+        main_ost = (request.user.user_per_day.value * x.days_to_salary) + \
+                request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
         if last_transfer[0].name == 'аванс':
-            ost = (request.user.user_per_day.value * x.days_to_salary) + \
-                request.user.user_reserv.value + \
-                sum_of_not_paid + last_transfer[0].value
+            ost = main_ost + last_transfer[0].value
 
         else:
-            ost = (request.user.user_per_day.value * x.days_to_salary) + \
-                request.user.user_reserv.value + sum_of_not_paid
+            ost = main_ost
 
         context["ost"] = ost
 
@@ -65,15 +80,6 @@ def expences_view(request):
         buffer_money = int(real_user_balance.balance) - int(ost)
         context['real_balance'] = real_user_balance.balance
         context['buffer_money'] = buffer_money
-        # дополнителнительные доходы за текущий месяц
-        additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
-                                                                                     date__month=date_day_to.date.month))
-        sum_of_additional = 0
-        for add in additional:
-            sum_of_additional += add.value
-        context["additional"] = sum_of_additional
-        # # сумма дополнительных доходов, которые еще не использованны, но все еще на карте
-        # not_used_additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(status=True))
 
         # временно фильтровать по статусу. далее автоматически
         salary_for_mounth = models.Salary.objects.filter(
