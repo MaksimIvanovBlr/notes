@@ -72,6 +72,8 @@ def expences_view(request):
         for add in additional:
             sum_of_additional += add.value
         context["additional"] = sum_of_additional
+        # # сумма дополнительных доходов, которые еще не использованны, но все еще на карте
+        # not_used_additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(status=True))
 
         # временно фильтровать по статусу. далее автоматически
         salary_for_mounth = models.Salary.objects.filter(

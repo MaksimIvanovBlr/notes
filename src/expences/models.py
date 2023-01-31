@@ -119,6 +119,10 @@ class AdditionalIncome(models.Model):
         verbose_name='дата изменения',
         auto_now_add=True
     )
+    status = models.BooleanField(
+        verbose_name='статус',
+        default=True
+    )
 
 
 # резерв
