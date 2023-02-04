@@ -37,7 +37,8 @@ def expences_view(request):
             defaults={'value': 0}
         )
         if created:
-            context['created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
+            context[
+                'created'] = 'Для расчета необходимо указать ЗП за текущий месяц,обязательные расходы, а потом сделать перерасчет(пересчитать резерв). Данные пункты будут обозначанны "!" '
             context['attention'] = '!'
         context["reserv"] = reserv.value
         # не оплаченные услуги
@@ -57,7 +58,8 @@ def expences_view(request):
         context["additional"] = sum_of_additional
 
         # сумма дополнительных доходов, которые еще не использованны, но все еще на карте
-        not_used_additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(status=True))
+        not_used_additional = models.AdditionalIncome.objects.filter(
+            Q(user=request.user) & Q(status=True))
         sum_of_not_used_additional = 0
         for not_used in not_used_additional:
             sum_of_not_used_additional += not_used.value
@@ -66,7 +68,7 @@ def expences_view(request):
         # ожидаемый остаток на карте(исходя из данных)
         last_transfer = models.Salary.objects.all().order_by('-id')[:1]
         main_ost = (request.user.user_per_day.value * x.days_to_salary) + \
-                request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
+            request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
         if last_transfer[0].name == 'аванс':
             ost = main_ost + last_transfer[0].value
 
@@ -190,7 +192,7 @@ class CreateExpences(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdateExpences(UserPassesTestMixin ,LoginRequiredMixin, generic.UpdateView):
+class UpdateExpences(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
     model = models.IncomeAndExpediture
     form_class = forms.ExpencesForm
     template_name = "expences/edit_expences.html"
@@ -298,7 +300,7 @@ class CreateIncome(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdateIncome(UserPassesTestMixin ,LoginRequiredMixin, generic.UpdateView):
+class UpdateIncome(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
     model = models.Salary
     form_class = forms.SalaryForm
     template_name = "expences/edit_expences.html"
@@ -429,6 +431,7 @@ class DetailPerDay(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
 
 # резерв
 
+
 class UpdateReserv(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
     model = models.Reserv
     login_url = reverse_lazy('login')
@@ -440,7 +443,7 @@ class UpdateReserv(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить резерв'
         return context
-    
+
     def test_func(self):
         for_test = self.get_object()
         if self.request.user == for_test.user:
@@ -479,7 +482,7 @@ class UpdateAdditional(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateVi
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить дополнительный доход'
         return context
-    
+
     def test_func(self):
         for_test = self.get_object()
         if self.request.user == for_test.user:
@@ -499,7 +502,7 @@ class DeleteAdditional(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteVi
         context["operation"] = 'Удаление'
         context["alert_message"] = 'Вы точно хотите удалить данную запись о допонительном доходе???'
         return context
-    
+
     def test_func(self):
         for_test = self.get_object()
         if self.request.user == for_test.user:
