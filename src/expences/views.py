@@ -190,7 +190,7 @@ class CreateExpences(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdateExpences(LoginRequiredMixin, generic.UpdateView):
+class UpdateExpences(UserPassesTestMixin ,LoginRequiredMixin, generic.UpdateView):
     model = models.IncomeAndExpediture
     form_class = forms.ExpencesForm
     template_name = "expences/edit_expences.html"
@@ -206,8 +206,15 @@ class UpdateExpences(LoginRequiredMixin, generic.UpdateView):
         # тут нужно добавить логику расчета резерва
         return super().get_success_url()
 
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
-class DeleteExpences(LoginRequiredMixin, generic.DeleteView):
+
+class DeleteExpences(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteView):
     model = models.IncomeAndExpediture
     template_name = "expences/delete_expences.html"
     success_url = reverse_lazy('expences:list')
@@ -218,6 +225,13 @@ class DeleteExpences(LoginRequiredMixin, generic.DeleteView):
         context["operation"] = 'Удаление'
         context["alert_message"] = 'Вы точно хотите удалить данную сторку расходов???'
         return context
+
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 
 class ListExpences(LoginRequiredMixin, generic.ListView):
@@ -251,11 +265,17 @@ class ListExpences(LoginRequiredMixin, generic.ListView):
     #     return self.form_valid(form)
 
 
-class DetailExpences(LoginRequiredMixin, generic.DetailView):
+class DetailExpences(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
     model = models.IncomeAndExpediture
     template_name = "expences/detail_expences.html"
     login_url = reverse_lazy('login')
 
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 #  зарплата/аванс
 
@@ -278,7 +298,7 @@ class CreateIncome(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdateIncome(LoginRequiredMixin, generic.UpdateView):
+class UpdateIncome(UserPassesTestMixin ,LoginRequiredMixin, generic.UpdateView):
     model = models.Salary
     form_class = forms.SalaryForm
     template_name = "expences/edit_expences.html"
@@ -290,8 +310,15 @@ class UpdateIncome(LoginRequiredMixin, generic.UpdateView):
         context["operation"] = 'Изменить'
         return context
 
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
-class DeleteIncome(LoginRequiredMixin, generic.DeleteView):
+
+class DeleteIncome(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteView):
     model = models.Salary
     template_name = "expences/delete_expences.html"
     login_url = reverse_lazy('login')
@@ -303,6 +330,13 @@ class DeleteIncome(LoginRequiredMixin, generic.DeleteView):
         context["alert_message"] = 'Вы точно хотите удалить данную запись о зарплате(авансе)???'
         return context
 
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
+
 
 class ListIncome(LoginRequiredMixin, generic.ListView):
     model = models.Salary
@@ -310,14 +344,12 @@ class ListIncome(LoginRequiredMixin, generic.ListView):
     login_url = reverse_lazy('login')
 
     def get_queryset(self):
-        user = self.request.user
-        object_list = models.Salary.objects.filter(user=user)
+        object_list = models.Salary.objects.filter(user=self.request.user)
         return object_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user = self.request.user
-        object_list = models.Salary.objects.filter(user=user)
+        object_list = models.Salary.objects.filter(user=self.request.user)
         total = 0
         for obj in object_list:
             total += obj.value
@@ -325,10 +357,17 @@ class ListIncome(LoginRequiredMixin, generic.ListView):
         return context
 
 
-class DetailIncome(LoginRequiredMixin, generic.DetailView):
+class DetailIncome(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
     model = models.Salary
     template_name = "expences/detail_expences.html"
     login_url = reverse_lazy('login')
+
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 
 # PerDay/дневной расход
@@ -351,7 +390,7 @@ class CreatePerDay(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdatePerDay(LoginRequiredMixin, generic.UpdateView):
+class UpdatePerDay(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
     model = models.PerDay
     form_class = forms.PerDayForm
     template_name = "expences/edit_expences.html"
@@ -363,8 +402,15 @@ class UpdatePerDay(LoginRequiredMixin, generic.UpdateView):
         context["operation"] = 'Изменить'
         return context
 
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
-class DetailPerDay(LoginRequiredMixin, generic.DetailView):
+
+class DetailPerDay(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
     model = models.PerDay
     login_url = reverse_lazy('login')
     template_name = "expences/detil_expences.html"
@@ -374,10 +420,16 @@ class DetailPerDay(LoginRequiredMixin, generic.DetailView):
         object_list = models.PerDay.objects.filter(user=user)
         return object_list
 
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 # резерв
 
-class UpdateReserv(LoginRequiredMixin, generic.UpdateView):
+class UpdateReserv(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
     model = models.Reserv
     login_url = reverse_lazy('login')
     template_name = "expences/edit_reserv.html"
@@ -388,6 +440,13 @@ class UpdateReserv(LoginRequiredMixin, generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить резерв'
         return context
+    
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 
 # дополнительных доход
@@ -409,7 +468,7 @@ class CreateAdditional(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-class UpdateAdditional(LoginRequiredMixin, generic.UpdateView):
+class UpdateAdditional(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
     model = models.AdditionalIncome
     template_name = "expences/edit_expences.html"
     form_class = forms.AdditionalIncomeForm
@@ -420,9 +479,16 @@ class UpdateAdditional(LoginRequiredMixin, generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context["operation"] = 'Изменить дополнительный доход'
         return context
+    
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 
-class DeleteAdditional(LoginRequiredMixin, generic.DeleteView):
+class DeleteAdditional(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteView):
     model = models.AdditionalIncome
     template_name = "expences/delete_expences.html"
     success_url = reverse_lazy('expences:main')
@@ -433,6 +499,13 @@ class DeleteAdditional(LoginRequiredMixin, generic.DeleteView):
         context["operation"] = 'Удаление'
         context["alert_message"] = 'Вы точно хотите удалить данную запись о допонительном доходе???'
         return context
+    
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
 
 
 class ListAdditional(generic.ListView):
