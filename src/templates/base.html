@@ -15,12 +15,10 @@
 
 
 <meta name="theme-color" content="#712cf9">
-    <!-- Custom styles for this template -->
   </head>
   <body class="d-flex flex-column bg-dark h-100">
     
 <header>
-  <!-- Fixed navbar -->
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="{% url 'homepage:home' %}">Главная</a>
@@ -32,9 +30,6 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'notes:main' %}">Заметки</a>
           </li>
-          {% comment %} <li class="nav-item">
-            <a class="nav-link" href="{% url 'budgeting:budgeting_page' %}">Бюджет</a>
-          </li> {% endcomment %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'expences:main' %}">Бюджет</a>
           </li>
@@ -72,7 +67,6 @@
   </nav>
 </header>
 
-<!-- Begin page content -->
 <main class="p-3 mb-2 bg-dark text-white">
   <div class="container">
   {% block body %}
