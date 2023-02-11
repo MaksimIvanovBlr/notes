@@ -2,7 +2,7 @@ from django.contrib import admin
 from . import models
 
 
-class IncomeAndExpeditureAdmin(admin.ModelAdmin):
+class ExpeditureAdmin(admin.ModelAdmin):
     list_display = ('user', 'name', 'value', 'date', 'status')
 
 
@@ -22,7 +22,7 @@ class AdditionalIncomeAdmin(admin.ModelAdmin):
     list_display = ('user', 'name', 'value', 'date')
 
 
-admin.site.register(models.IncomeAndExpediture, IncomeAndExpeditureAdmin)
+admin.site.register(models.Expediture, ExpeditureAdmin)
 admin.site.register(models.Salary, SalaryAdmin)
 admin.site.register(models.PerDay, PerDayAdmin)
 admin.site.register(models.Reserv, ReservAdmin)

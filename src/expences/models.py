@@ -4,14 +4,23 @@ from django.contrib.auth import get_user_model
 S_user = get_user_model()
 
 
-#  дневной расход
+#  данные пользователя(расход на день, дата получения ЗП, способ расчета, реальны баланс карты)
 class PerDay(models.Model):
+
+    X = 'Расчет за полный месяц'
+    Y = 'Расчет по факту зачисления'
+
+    CHOISE_GROUP = {
+        (X, 'Расчет за полный месяц'),
+        (Y, 'Расчет по мере зачисления на карту'),
+    }
     user = models.OneToOneField(
         S_user,
         verbose_name="Пользователь",
         related_name='user_per_day',
         on_delete=models.CASCADE
     )
+    # сумма расхода на день
     value = models.DecimalField(
         verbose_name='Расход на день',
         max_digits=10,
@@ -22,10 +31,13 @@ class PerDay(models.Model):
         verbose_name='День зарплаты'
 
     )
-    # "гaлочка" для указания способа расчета. расчет за полный месяц(аванс+ЗП) или по мере поступления денег на карту
-    salary_method = models.BooleanField(
-        verbose_name='Расчет за полный месяц',
-    )
+    # Указания способа расчета. расчет за полный месяц(аванс+ЗП) или по мере поступления денег на карту
+    salary_method = models.CharField(
+        verbose_name='Способ расчета',
+        max_length=50,
+        choices=CHOISE_GROUP,
+        default=X)
+
     # реальный баланс карты
     balance = models.DecimalField(
         verbose_name='Реальный баланс карты',
@@ -33,6 +45,7 @@ class PerDay(models.Model):
         decimal_places=2,
         default=0
     )
+
 
 
 # расходы
@@ -55,7 +68,7 @@ class Expediture(models.Model):
         auto_now=True
     )
     status = models.BooleanField(
-        verbose_name='статус'
+        verbose_name='Оплачено'
     )
     description = models.TextField(
         verbose_name='Описание',
@@ -95,7 +108,8 @@ class Salary(models.Model):
         auto_now_add=True
     )
     status = models.BooleanField(
-        verbose_name='статус'
+        verbose_name='статус',
+        default=True
     )
 
 
@@ -138,6 +152,15 @@ class Reserv(models.Model):
         decimal_places=2,
         default=0
     )
+
+    value_of_days_exp = models.DecimalField(
+        verbose_name='Остаток на ежедневные расходы до конца месяца',
+        max_digits=100,
+        decimal_places=2,
+        default=0
+    )
+
+
     date = models.DateField(
         verbose_name='Дата изменения',
         auto_now_add=True
