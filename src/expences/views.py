@@ -7,6 +7,7 @@ from . import date_day_to
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
@@ -25,6 +26,27 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 def expences_view(request):
     try:
         context = {}
+
+        #расчет даты
+        now_date = datetime.now()
+        user_date = 1
+        some_date2 = datetime(now_date.year, now_date.month, user_date)
+        if now_date.month == 12:
+            some_date = datetime(now_date.year + 1, 1, user_date)
+        else:
+            some_date = datetime(now_date.year, now_date.month + 1, user_date)
+        
+        if now_date.day < some_date.day:
+            day_to_salary1 = some_date2 - now_date
+        else:
+            day_to_salary1 = some_date - now_date
+        day_to_salary1 = day_to_salary1.days
+        print(f'дней до ЗП {day_to_salary1}')
+
+
+
+
+        
         x = date_day_to.ToSalary()
         # дни до зарплаты
         context["days_to_salary"] = x.days_to_salary
@@ -79,7 +101,14 @@ def expences_view(request):
 
         # буферная сумма- разница между реальным балансом и прогнозируемым
         real_user_balance = request.user.user_per_day
+        print(real_user_balance)
         buffer_money = int(real_user_balance.balance) - int(ost)
+        print('!!!!!!!!!!!!')
+        print(f'реальный баланс пользователя--- {real_user_balance.balance}')
+        print(f'остаток---- {ost}')
+        print(f'буффурные деньги {buffer_money}')
+        print(f'данные {request.user.user_per_day}')
+        print(f'день {request.user.user_per_day.day.day}')
         context['real_balance'] = real_user_balance.balance
         context['buffer_money'] = buffer_money
 
@@ -91,21 +120,7 @@ def expences_view(request):
             sum_of_salary += salary.value
         context["salary_for_mounth"] = sum_of_salary
 
-        # автоматическое обновление статуса расходов после получения ЗП(когда до ЗП 0(ноль) дней) но в этот день,
-        # получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
-        if x.days_to_salary == 0:
-            #
-            all_expediture = models.Expediture.objects.filter(
-                user=request.user)
-            for expediture in all_expediture:
-                expediture.status = False
-                expediture.save()
-            user_salary = models.Salary.objects.filter(
-                Q(user=request.user) & Q(name='зарплата') & Q(status=True))
-            if user_salary:
-                request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (
-                    request.user.user_per_day.value * 31)
-                request.user.user_reserv.save()
+    
 
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте
         if request.method == 'POST':
