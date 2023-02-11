@@ -29,7 +29,8 @@ def expences_view(request):
 
         #расчет даты
         now_date = datetime.now()
-        user_date = 1
+        # now_date = datetime(2021.10.15) => for test
+        user_date = request.user.user_per_day.day.day
         some_date2 = datetime(now_date.year, now_date.month, user_date)
         if now_date.month == 12:
             some_date = datetime(now_date.year + 1, 1, user_date)
@@ -43,16 +44,11 @@ def expences_view(request):
         day_to_salary1 = day_to_salary1.days
         print(f'дней до ЗП {day_to_salary1}')
 
-
-
-
-        
-        x = date_day_to.ToSalary()
         # дни до зарплаты
-        context["days_to_salary"] = x.days_to_salary
+        context["days_to_salary"] = day_to_salary1
         # сумма на карте до конца месяца на ежедневные расходы
         context["money_to_salary"] = request.user.user_per_day.value * \
-            x.days_to_salary
+            day_to_salary1
         # сумма резерва на карте
         reserv, created = models.Reserv.objects.get_or_create(
             user=request.user,
@@ -89,7 +85,7 @@ def expences_view(request):
 
         # ожидаемый остаток на карте(исходя из данных)
         last_transfer = models.Salary.objects.all().order_by('-id')[:1]
-        main_ost = (request.user.user_per_day.value * x.days_to_salary) + \
+        main_ost = (request.user.user_per_day.value * day_to_salary1) + \
             request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
         if last_transfer[0].name == 'аванс':
             ost = main_ost + last_transfer[0].value
@@ -155,11 +151,6 @@ def recalculation(request):
         for salary in salary_for_mounth:
             sum_of_salary += salary.value
 
-        x = date_day_to.ToSalary()
-        if x.days_to_salary != 0:
-            days_to_next_salary = x.days_to_salary
-        else:
-            days_to_next_salary = 31
 
         all_expediture = models.Expediture.objects.filter(
             user=request.user)
@@ -176,7 +167,7 @@ def recalculation(request):
         context["not_paid"] = sum_of_not_paid
 
         request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (
-            request.user.user_per_day.value * days_to_next_salary)
+            request.user.user_per_day.value * 31)
         request.user.user_reserv.save()
 
     return render(
