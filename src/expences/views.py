@@ -42,7 +42,7 @@ def expences_view(request):
             context['attention'] = '!'
         context["reserv"] = reserv.value
         # не оплаченные услуги
-        not_paid = models.IncomeAndExpediture.objects.filter(
+        not_paid = models.Expediture.objects.filter(
             Q(user=request.user) & Q(status=False))
         sum_of_not_paid = 0
         for val in not_paid:
@@ -95,7 +95,7 @@ def expences_view(request):
         # получается нельзя будет отметить оплату, т.к при обновлении страницы в этот день будет сбрасывать статус
         if x.days_to_salary == 0:
             #
-            all_expediture = models.IncomeAndExpediture.objects.filter(
+            all_expediture = models.Expediture.objects.filter(
                 user=request.user)
             for expediture in all_expediture:
                 expediture.status = False
@@ -146,14 +146,14 @@ def recalculation(request):
         else:
             days_to_next_salary = 31
 
-        all_expediture = models.IncomeAndExpediture.objects.filter(
+        all_expediture = models.Expediture.objects.filter(
             user=request.user)
         for expediture in all_expediture:
             expediture.status = False
             expediture.save()
 
         #  сумма неоплаченных ежемесячных платежей
-        not_paid = models.IncomeAndExpediture.objects.filter(
+        not_paid = models.Expediture.objects.filter(
             Q(user=request.user) & Q(status=False))
         sum_of_not_paid = 0
         for val in not_paid:
@@ -175,7 +175,7 @@ def recalculation(request):
 # расходы
 
 class CreateExpences(LoginRequiredMixin, generic.CreateView):
-    model = models.IncomeAndExpediture
+    model = models.Expediture
     form_class = forms.ExpencesForm
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list')
@@ -193,7 +193,7 @@ class CreateExpences(LoginRequiredMixin, generic.CreateView):
 
 
 class UpdateExpences(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
-    model = models.IncomeAndExpediture
+    model = models.Expediture
     form_class = forms.ExpencesForm
     template_name = "expences/edit_expences.html"
     success_url = reverse_lazy('expences:list')
@@ -217,7 +217,7 @@ class UpdateExpences(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView
 
 
 class DeleteExpences(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteView):
-    model = models.IncomeAndExpediture
+    model = models.Expediture
     template_name = "expences/delete_expences.html"
     success_url = reverse_lazy('expences:list')
     login_url = reverse_lazy('expences:main')
@@ -237,25 +237,25 @@ class DeleteExpences(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteView
 
 
 class ListExpences(LoginRequiredMixin, generic.ListView):
-    model = models.IncomeAndExpediture
+    model = models.Expediture
     template_name = "expences/list_expences.html"
     login_url = reverse_lazy('login')
 
     # from_class = forms.ExpencesForms
     def get_queryset(self):
-        object_list = models.IncomeAndExpediture.objects.filter(
+        object_list = models.Expediture.objects.filter(
             user=self.request.user)
         return object_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        object_list = models.IncomeAndExpediture.objects.filter(user=user)
+        object_list = models.Expediture.objects.filter(user=user)
         total_to_pay = 0
         for obj in object_list:
             total_to_pay += obj.value
         context["total_to_pay"] = total_to_pay
-        object_list_2 = models.IncomeAndExpediture.objects.filter(
+        object_list_2 = models.Expediture.objects.filter(
             Q(user=user) & Q(status=False))
         total = 0
         for obj in object_list_2:
@@ -268,7 +268,7 @@ class ListExpences(LoginRequiredMixin, generic.ListView):
 
 
 class DetailExpences(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
-    model = models.IncomeAndExpediture
+    model = models.Expediture
     template_name = "expences/detail_expences.html"
     login_url = reverse_lazy('login')
 

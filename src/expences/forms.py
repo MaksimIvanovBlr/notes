@@ -4,7 +4,7 @@ from . import models
 
 class ExpencesForm(forms.ModelForm):
     class Meta:
-        model = models.IncomeAndExpediture
+        model = models.Expediture
         fields = ('name', 'value', 'status', 'description')
 
 

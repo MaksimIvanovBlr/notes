@@ -36,7 +36,7 @@ class PerDay(models.Model):
 
 
 # расходы
-class IncomeAndExpediture(models.Model):
+class Expediture(models.Model):
     user = models.ForeignKey(
         S_user,
         verbose_name="Пользователь",
