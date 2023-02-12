@@ -42,7 +42,6 @@ def expences_view(request):
         else:
             day_to_salary1 = some_date - now_date
         day_to_salary1 = day_to_salary1.days
-        print(f'дней до ЗП {day_to_salary1}')
 
         # дни до зарплаты
         context["days_to_salary"] = day_to_salary1
@@ -84,29 +83,31 @@ def expences_view(request):
         context['not_used_additional'] = sum_of_not_used_additional
 
         # ожидаемый остаток на карте(исходя из данных)
-        last_transfer = models.Salary.objects.all().order_by('-id')[:1]
+        last_transfer = models.Salary.objects.filter(user = request.user).order_by('-id')[:1]
+
         main_ost = (request.user.user_per_day.value * day_to_salary1) + \
             request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
-        if last_transfer[0].name == 'аванс':
-            ost = main_ost + last_transfer[0].value
 
+        if last_transfer:
+            if last_transfer[0].name == 'аванс':
+                ost = main_ost + last_transfer[0].value
         else:
             ost = main_ost
-
         context["ost"] = ost
 
         # буферная сумма- разница между реальным балансом и прогнозируемым
         real_user_balance = request.user.user_per_day
-        print(real_user_balance)
-        buffer_money = int(real_user_balance.balance) - int(ost)
-        print('!!!!!!!!!!!!')
-        print(f'реальный баланс пользователя--- {real_user_balance.balance}')
-        print(f'остаток---- {ost}')
-        print(f'буффурные деньги {buffer_money}')
-        print(f'данные {request.user.user_per_day}')
-        print(f'день {request.user.user_per_day.day.day}')
-        context['real_balance'] = real_user_balance.balance
-        context['buffer_money'] = buffer_money
+        if real_user_balance.balance != 0:
+            if real_user_balance.balance >= int(ost):
+                buffer_money = int(real_user_balance.balance) - int(ost)
+                # print('!!!!!!!!!!!!')
+                # print(f'реальный баланс пользователя--- {real_user_balance.balance}')
+                print(f'остаток---- {ost}')
+                # print(f'буфферные деньги {buffer_money}')
+                # print(f'данные {request.user.user_per_day}')
+                # print(f'день {request.user.user_per_day.day.day}')
+                context['real_balance'] = real_user_balance.balance
+                context['buffer_money'] = buffer_money
 
         # временно фильтровать по статусу. далее автоматически
         salary_for_mounth = models.Salary.objects.filter(
@@ -210,9 +211,6 @@ class UpdateExpences(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView
         context["operation"] = 'Изменить'
         return context
 
-    def get_success_url(self):
-        # тут нужно добавить логику расчета резерва
-        return super().get_success_url()
 
     def test_func(self):
         for_test = self.get_object()
@@ -247,7 +245,6 @@ class ListExpences(LoginRequiredMixin, generic.ListView):
     template_name = "expences/list_expences.html"
     login_url = reverse_lazy('login')
 
-    # from_class = forms.ExpencesForms
     def get_queryset(self):
         object_list = models.Expediture.objects.filter(
             user=self.request.user)
@@ -268,9 +265,6 @@ class ListExpences(LoginRequiredMixin, generic.ListView):
             total += obj.value
         context['total'] = total
         return context
-    # def post(self, request, *args, **kwargs):
-    #     form = self.get_form()
-    #     return self.form_valid(form)
 
 
 class DetailExpences(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
