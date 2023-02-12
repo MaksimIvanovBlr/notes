@@ -3,7 +3,6 @@ from . import models, forms
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from . import date_day_to
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -26,7 +25,6 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 def expences_view(request):
     try:
         context = {}
-
         #расчет даты
         now_date = datetime.now()
         # now_date = datetime(2021.10.15) => for test
@@ -67,8 +65,8 @@ def expences_view(request):
         context["not_paid"] = sum_of_not_paid
 
         # дополнителнительные доходы за текущий месяц
-        additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=date_day_to.date.year,
-                                                                                     date__month=date_day_to.date.month))
+        additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=datetime.now().year,
+                                                                                     date__month=datetime.now().month))
         sum_of_additional = 0
         for add in additional:
             sum_of_additional += add.value
@@ -76,7 +74,7 @@ def expences_view(request):
 
         # сумма дополнительных доходов, которые еще не использованны, но все еще на карте
         not_used_additional = models.AdditionalIncome.objects.filter(
-            Q(user=request.user) & Q(status=True))
+            Q(user=request.user) & Q(status=False))
         sum_of_not_used_additional = 0
         for not_used in not_used_additional:
             sum_of_not_used_additional += not_used.value
@@ -97,17 +95,14 @@ def expences_view(request):
 
         # буферная сумма- разница между реальным балансом и прогнозируемым
         real_user_balance = request.user.user_per_day
+        context['real_balance'] = 0
+        context['buffer_money'] = 0
         if real_user_balance.balance != 0:
             if real_user_balance.balance >= int(ost):
                 buffer_money = int(real_user_balance.balance) - int(ost)
-                # print('!!!!!!!!!!!!')
-                # print(f'реальный баланс пользователя--- {real_user_balance.balance}')
-                print(f'остаток---- {ost}')
-                # print(f'буфферные деньги {buffer_money}')
-                # print(f'данные {request.user.user_per_day}')
-                # print(f'день {request.user.user_per_day.day.day}')
                 context['real_balance'] = real_user_balance.balance
                 context['buffer_money'] = buffer_money
+        
 
         # временно фильтровать по статусу. далее автоматически
         salary_for_mounth = models.Salary.objects.filter(
@@ -118,7 +113,7 @@ def expences_view(request):
         context["salary_for_mounth"] = sum_of_salary
 
     
-
+        context['money_per_day_to_salary'] = request.user.user_reserv.value_of_days_exp
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте
         if request.method == 'POST':
             balance = request.POST.get('balance')
@@ -144,6 +139,22 @@ def expences_view(request):
 @login_required(login_url='login')
 def recalculation(request):
     context = {}
+
+    now_date = datetime.now()
+    # now_date = datetime(2021.10.15) => for test
+    user_date = request.user.user_per_day.day.day
+    some_date2 = datetime(now_date.year, now_date.month, user_date)
+    if now_date.month == 12:
+        some_date = datetime(now_date.year + 1, 1, user_date)
+    else:
+        some_date = datetime(now_date.year, now_date.month + 1, user_date)
+
+    if now_date.day < some_date.day:
+        day_to_salary1 = some_date2 - now_date
+    else:
+        day_to_salary1 = some_date - now_date
+    day_to_salary1 = day_to_salary1.days
+
     if request.method == "POST":
 
         salary_for_mounth = models.Salary.objects.filter(
@@ -166,9 +177,15 @@ def recalculation(request):
         for val in not_paid:
             sum_of_not_paid += val.value
         context["not_paid"] = sum_of_not_paid
+        
+        if day_to_salary1 == 0:
+            user_day_to_salary1 = 31
+        else:
+            user_day_to_salary1 = day_to_salary1 
 
         request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (
-            request.user.user_per_day.value * 31)
+            request.user.user_per_day.value * user_day_to_salary1)
+        request.user.user_reserv.value_of_days_exp = request.user.user_per_day.value * user_day_to_salary1
         request.user.user_reserv.save()
 
     return render(

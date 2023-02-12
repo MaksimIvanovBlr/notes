@@ -134,7 +134,7 @@ class AdditionalIncome(models.Model):
         auto_now_add=True
     )
     status = models.BooleanField(
-        verbose_name='статус',
+        verbose_name='Использован',
         default=True
     )
 
