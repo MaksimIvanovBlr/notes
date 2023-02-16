@@ -7,25 +7,44 @@
 
 
 {% block body %}
-<h1>Дневной расход<h1>
-
+<h1>Дневной расход</h1>
+<a href="{% url 'expences:daily-consumption' %}"><button type="button" class="btn btn-dark"><b><i>ДНЕВНОЙ ОСТАТОК</i></b></button></a><br><br>
 <div class='daily_cons_balance' >
     <p>тут будет шильдик с остатком дневным</p>
     <p>в виде карты. нужно сверстать крастоу</p>
 </div>
 
-<p>Месячный остаток:</p>
-<p>Буфферные деньги</p>
-<p></p>
-<p></p>
-<p></p>
+<p>Месячный остаток: {{ per_month }} руб</p>
+<p>Буфферные деньги: {{ buffer_money }} руб</p>
+<p>test: {{ 3 }}</p>
+
+
 <div>
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form |crispy}}
-    <input type="submit" class="btn btn-success" value="Ok">
+        <p>Потраченно денег:</p>
+        <p>Сумма:  <input type="number" name="spend_money" value="" min="0"></p>
+        <p><button type="submit" class="btn btn-secondary">ok</button></p>
     </form>
 </div>
+<div>
+    {% if spend_money %}
 
+    
+    Потраченно: {{ spend_money }} руб <br>
+
+    {% if buffer_money >= spend_money %}
+
+    Остаток: {{ spend_money_lt_buffer }}руб <br>
+
+    {% else %} 
+
+    <h3>{{alarm}}</h3>
+    Сумма списанная с резерва: {{ sum_that_gt }}<br>
+    Резерв:{{ reserv_value }}<br>
+    {% endif %}
+
+    {% endif %}
+</div>
 
 {% endblock body %}
