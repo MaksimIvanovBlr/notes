@@ -30,3 +30,9 @@ class AdditionalIncomeForm(forms.ModelForm):
     class Meta:
         model = models.AdditionalIncome
         fields = ('name', 'value', 'status')
+
+
+class DailyConsumptionForm(forms.ModelForm):
+    class Meta:
+        model = models.DailyConsumption
+        fields = ('buffer_money',)

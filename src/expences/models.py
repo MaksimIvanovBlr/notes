@@ -165,3 +165,25 @@ class Reserv(models.Model):
         verbose_name='Дата изменения',
         auto_now_add=True
     )
+
+
+class DailyConsumption(models.Model):
+    user = models.OneToOneField(
+        S_user,
+        verbose_name="Пользователь",
+        related_name='user_daily_cons',
+        on_delete=models.CASCADE)
+
+    per_month = models.DecimalField(
+        verbose_name='Месячный остаток',
+        max_digits=100,
+        decimal_places=2,
+        default=0
+    )
+
+    buffer_money = models.DecimalField(
+        verbose_name='Дневной остаток',
+        max_digits=100,
+        decimal_places=2,
+        default=0
+    )
