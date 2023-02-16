@@ -21,37 +21,6 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
         return super().form_valid(form)
 
 
-# class UpdateDailyConsumption(LoginRequiredMixin,UserPassesTestMixin, generic.UpdateView):
-#     model = models.DailyConsumption
-#     form_class = forms.DailyConsumptionForm
-#     login_url = reverse_lazy('login')
-#     template_name = "expences/daily_consumption.html"
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["operation"] = 'Создать'
-#         return context
-
-#     def form_valid(self, form):
-#         form.instance.user = self.request.user
-#         form.instance.per_month = 0
-#         return super().form_valid(form)
-
-#     def post(self, request, *args, **kwargs):
-#         self.object = self.get_object()
-#         return super().post(request, *args, **kwargs)
-
-
-#     def get_success_url(self): 
-#         return reverse_lazy('expences:daily-consumption', kwargs={'pk': self.request.user.user_daily_cons.pk})
-
-#     def test_func(self):
-#         for_test = self.get_object()
-#         if self.request.user == for_test.user:
-#             return True
-#         else:
-#             return False
-
 
 @login_required(login_url='login')
 def daily_consumption(request):
