@@ -25,16 +25,40 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 @login_required(login_url='login')
 def daily_consumption(request):
     context = {}
+    
+    #нужно потом убрать это и подкидаывать только значение
+    now_date = datetime.now()
+    # now_date = datetime(2021.10.15) => for test
+    user_date = request.user.user_per_day.day.day
+    some_date2 = datetime(now_date.year, now_date.month, user_date)
+    if now_date.month == 12:
+        some_date = datetime(now_date.year + 1, 1, user_date)
+    else:
+        some_date = datetime(now_date.year, now_date.month + 1, user_date)
+    
+    if now_date.day < some_date.day:
+        day_to_salary1 = some_date2 - now_date
+    else:
+        day_to_salary1 = some_date - now_date
+    day_to_salary1 = day_to_salary1.days
+
+    buffer_money = request.user.user_daily_cons.per_month - (request.user.user_per_day.value * day_to_salary1) 
+    daily_consumption = request.user.user_daily_cons
+    daily_consumption.buffer_money += buffer_money
+    daily_consumption.per_month = request.user.user_per_day.value * day_to_salary1
+    daily_consumption.save()
+
+
+
     context['per_month'] = request.user.user_daily_cons.per_month
     context['buffer_money'] = request.user.user_daily_cons.buffer_money
+    context['days'] = request.user.user_daily_cons.per_month /  request.user.user_per_day.value
     context['3'] = 3
-    
 
     if request.method == "POST":
         spend_money = int(request.POST.get('spend_money'))
         context['spend_money'] = spend_money
         # print(spend_money)
-        daily_consumption = request.user.user_daily_cons
         reserv = request.user.user_reserv
         # print(daily_consumption)
         # print(daily_consumption.per_month, daily_consumption.buffer_money)
@@ -55,10 +79,10 @@ def daily_consumption(request):
             context['sum_that_gt'] = abs(daily_consumption.buffer_money - spend_money)
 
         else:
-            print(daily_consumption.buffer_money - spend_money)
+            # print(daily_consumption.buffer_money - spend_money)
             daily_consumption.buffer_money -= spend_money
             daily_consumption.save()
-            print(f'{daily_consumption.buffer_money-spend_money }= {daily_consumption.buffer_money} - {spend_money}')
+            # print(f'{daily_consumption.buffer_money-spend_money }= {daily_consumption.buffer_money} - {spend_money}')
             context['spend_money_lt_buffer'] = daily_consumption.buffer_money 
 
 
@@ -166,7 +190,7 @@ def expences_view(request):
         context["salary_for_mounth"] = sum_of_salary
 
     
-        # context['money_per_day_to_salary'] = request.user.user_reserv.value_of_days_exp
+        context['money_per_day_to_salary'] = request.user.user_daily_cons.per_month
 
 
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте
@@ -218,7 +242,6 @@ def recalculation(request):
         for salary in salary_for_mounth:
             sum_of_salary += salary.value
 
-
         all_expediture = models.Expediture.objects.filter(
             user=request.user)
         for expediture in all_expediture:
@@ -237,6 +260,10 @@ def recalculation(request):
             user_day_to_salary1 = 31
         else:
             user_day_to_salary1 = day_to_salary1 
+        
+        daily_consumption = request.user.user_daily_cons
+        daily_consumption.per_month = request.user.user_per_day.value * day_to_salary1
+        daily_consumption.save()
 
         request.user.user_reserv.value = sum_of_salary - sum_of_not_paid - (
             request.user.user_per_day.value * user_day_to_salary1)
@@ -482,6 +509,33 @@ class UpdatePerDay(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
             return True
         else:
             return False
+    
+    def get_success_url(self):
+        now_date = datetime.now()
+        # now_date = datetime(2021.10.15) => for test
+        user_date = self.request.user.user_per_day.day.day
+        some_date2 = datetime(now_date.year, now_date.month, user_date)
+        if now_date.month == 12:
+            some_date = datetime(now_date.year + 1, 1, user_date)
+        else:
+            some_date = datetime(now_date.year, now_date.month + 1, user_date)
+
+        if now_date.day < some_date.day:
+            day_to_salary1 = some_date2 - now_date
+        else:
+            day_to_salary1 = some_date - now_date
+        day_to_salary1 = day_to_salary1.days
+
+        if day_to_salary1 == 0:
+            user_day_to_salary1 = 31
+        else:
+            user_day_to_salary1 = day_to_salary1 
+        
+        daily_consumption = self.request.user.user_daily_cons
+        daily_consumption.per_month = self.request.user.user_per_day.value * day_to_salary1
+        daily_consumption.save()
+
+        return super().get_success_url()
 
 
 class DetailPerDay(UserPassesTestMixin, LoginRequiredMixin, generic.DetailView):
