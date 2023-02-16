@@ -27,5 +27,7 @@ urlpatterns = [
     path("create-a/", views.CreateAdditional.as_view(), name="create-a"),
     path("update-a/<int:pk>", views.UpdateAdditional.as_view(), name="update-a"),
     path("delete-a/<int:pk>", views.DeleteAdditional.as_view(), name="delete-a"),
-    path("list-a/", views.ListAdditional.as_view(), name="list-a")
+    path("list-a/", views.ListAdditional.as_view(), name="list-a"),
+
+    path("daily-consumption/<int:pk>", views.UpdateDailyConsumption.as_view(), name="daily-consumption"),
 ]

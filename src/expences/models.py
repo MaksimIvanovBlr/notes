@@ -145,21 +145,15 @@ class Reserv(models.Model):
         S_user,
         verbose_name="Пользователь",
         related_name='user_reserv',
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE
+    )
+
     value = models.DecimalField(
         verbose_name='Значение',
         max_digits=100,
         decimal_places=2,
         default=0
     )
-
-    value_of_days_exp = models.DecimalField(
-        verbose_name='Остаток на ежедневные расходы до конца месяца',
-        max_digits=100,
-        decimal_places=2,
-        default=0
-    )
-
 
     date = models.DateField(
         verbose_name='Дата изменения',
