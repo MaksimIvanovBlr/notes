@@ -53,41 +53,27 @@ def daily_consumption(request):
     context['per_month'] = request.user.user_daily_cons.per_month
     context['buffer_money'] = request.user.user_daily_cons.buffer_money
     context['days'] = request.user.user_daily_cons.per_month /  request.user.user_per_day.value
-    context['3'] = 3
 
     if request.method == "POST":
         spend_money = int(request.POST.get('spend_money'))
         context['spend_money'] = spend_money
-        # print(spend_money)
         reserv = request.user.user_reserv
-        # print(daily_consumption)
-        # print(daily_consumption.per_month, daily_consumption.buffer_money)
         if spend_money > daily_consumption.buffer_money:
-            # print('bigger than ', daily_consumption.buffer_money)
-            # print('buffer money:',daily_consumption.buffer_money,'spend money',spend_money)
             spend_money -= daily_consumption.buffer_money
-            # print(spend_money, 'after - buffer money')
-            # print(reserv.value, 'before')
             reserv.value -= spend_money
             daily_consumption.buffer_money = 0
             daily_consumption.save()
             reserv.save()
-            # print(reserv.value, 'after')
+
 
             context['alarm'] = 'Вы привысили лимит! Разница будет списана с "резерва".'
             context['reserv_value'] = reserv.value
             context['sum_that_gt'] = abs(daily_consumption.buffer_money - spend_money)
 
         else:
-            # print(daily_consumption.buffer_money - spend_money)
             daily_consumption.buffer_money -= spend_money
             daily_consumption.save()
-            # print(f'{daily_consumption.buffer_money-spend_money }= {daily_consumption.buffer_money} - {spend_money}')
             context['spend_money_lt_buffer'] = daily_consumption.buffer_money 
-
-
-
-
 
     return render(
             request=request,
