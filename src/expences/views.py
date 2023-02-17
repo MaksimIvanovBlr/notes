@@ -133,15 +133,12 @@ def expences_view(request):
         # ожидаемый остаток на карте(исходя из данных)
         last_transfer = models.Salary.objects.filter(user = request.user).order_by('-id')[:1]
 
-        main_ost = request.user.user_daily_cons.per_month + request.user.user_daily_cons.buffer_money + \
+        ost = request.user.user_daily_cons.per_month + request.user.user_daily_cons.buffer_money + \
             request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
-            
-        ost = 0
+
         if last_transfer:
             if last_transfer[0].name == 'аванс':
-                ost = main_ost + last_transfer[0].value
-        else:
-            ost = main_ost
+                ost += last_transfer[0].value
         context["ost"] = ost
 
         # буферная сумма и реальный(указанный пользователем баланс карты)
