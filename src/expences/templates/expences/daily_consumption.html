@@ -8,24 +8,21 @@
 
 {% block body %}
 <h1><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="btn btn-dark"><b>ДНЕВНОЙ ОСТАТОК</b></button></a></h1><br><br>
-<div class='daily_cons_balance' >
-    <p></p>
-    <p></p>
-</div>
-
-<p>Месячный остаток: {{ per_month }} руб</p>
-<p>На количество дней: {{ days }}</p>
-<p>Буфферные деньги: {{ buffer_money }} руб</p>
-<p>test: {{ 3 }}</p>
 
 
-<div>
+<div id='daily_cons_balance' >
+    <p>Месячный остаток: {{ per_month }} руб</p>
+    <p>На количество дней: {{ days }}</p>
+    <p>Буфферные деньги: {{ buffer_money }} руб</p> 
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <p>Потраченно денег:</p>
-        <p>Сумма:  <input type="number" name="spend_money" value="" min="0"></p>
-        <p><button type="submit" class="btn btn-secondary">ok</button></p>
+        <p>Потраченно денег:  <input id="text-field__input" type="number" name="spend_money" value="0" min="0">
+        <button type="submit" class="my_button">ok</button></p>
     </form>
+</div>
+
+<div>
+
 </div>
 <div>
     {% if spend_money %}

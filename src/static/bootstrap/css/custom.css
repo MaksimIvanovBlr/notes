@@ -1,10 +1,32 @@
-/* .my-class-body {
-  background-color: black;
-  width: 100vw; 
-  height: 100vh;
-} */
 
+#daily_cons_balance {
+  color: black;
+  font-size: large;
+  background-color: grey;
+  border-radius: 5px;
+  height: 200px;
+  width: 500px;
+  padding: 10px;
+  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191)
+}
 
+#text-field__input:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #2c038b;
+  border-radius: 5px;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+}
+#text-field__input {
+  border-radius: 5px;
+  width: 75px;
+}
+.my_button{
+  color:aliceblue;
+  background-color: rgb(101, 50, 191);
+  border-radius: 15px;
+}
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
