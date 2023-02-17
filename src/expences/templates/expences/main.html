@@ -27,10 +27,10 @@
         <td>Основной доход за месяц: </td>
         <td>{{ salary_for_mounth }} руб</td>
     </tr>
-    {% if additional != 0 %}
+    {% if not_used_additional != 0 %}
     <tr>
-        <td>Дополнительный доход за текущий месяц: </td>
-        <td>{{ additional }}руб</td>
+        <td>Дополнительный неиспользованный доход: </td>
+        <td>{{ not_used_additional }}руб</td>
     </tr>
     {% endif %}
     <tr>
@@ -40,10 +40,6 @@
     <tr>
         <td>На ежедневыне расходы до конца месяца: </td>
         <td>{{ money_to_salary }}руб(расчетный остаток)</td>
-    </tr>
-    <tr>
-        <td>На ежедневыне расходы до конца месяца(тестовое из БД): </td>
-        <td>{{ money_per_day_to_salary }}руб</td>
     </tr>
     {% if not_paid != 0 %}
     <tr>

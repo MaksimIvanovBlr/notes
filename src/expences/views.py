@@ -107,8 +107,8 @@ def expences_view(request):
         # дни до зарплаты
         context["days_to_salary"] = day_to_salary1
         # сумма на карте до конца месяца на ежедневные расходы
-        context["money_to_salary"] = request.user.user_per_day.value * \
-            day_to_salary1
+        context["money_to_salary"] = request.user.user_daily_cons.per_month
+
         # сумма резерва на карте
         reserv, created = models.Reserv.objects.get_or_create(
             user=request.user,
@@ -127,15 +127,16 @@ def expences_view(request):
             sum_of_not_paid += val.value
         context["not_paid"] = sum_of_not_paid
 
-        # дополнителнительные доходы за текущий месяц
-        additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=datetime.now().year,
-                                                                                     date__month=datetime.now().month))
-        sum_of_additional = 0
-        for add in additional:
-            sum_of_additional += add.value
-        context["additional"] = sum_of_additional
+        # # дополнителнительные доходы за текущий месяц
+        # additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=datetime.now().year,
+        #                                                                              date__month=datetime.now().month))
+        # sum_of_additional = 0
+        # for add in additional:
+        #     sum_of_additional += add.value
+        # context["additional"] = sum_of_additional
+        
 
-        # сумма дополнительных доходов, которые еще не использованны, но все еще на карте
+        # сумма дополнительных доходов, которые еще не использованны и все еще на карте
         not_used_additional = models.AdditionalIncome.objects.filter(
             Q(user=request.user) & Q(status=False))
         sum_of_not_used_additional = 0
@@ -146,7 +147,7 @@ def expences_view(request):
         # ожидаемый остаток на карте(исходя из данных)
         last_transfer = models.Salary.objects.filter(user = request.user).order_by('-id')[:1]
 
-        main_ost = (request.user.user_per_day.value * day_to_salary1) + \
+        main_ost = request.user.user_daily_cons.per_month + request.user.user_daily_cons.buffer_money + \
             request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
 
         if last_transfer:
@@ -156,15 +157,16 @@ def expences_view(request):
             ost = main_ost
         context["ost"] = ost
 
-        # буферная сумма- разница между реальным балансом и прогнозируемым
-        real_user_balance = request.user.user_per_day
-        context['real_balance'] = 0
-        context['buffer_money'] = 0
-        if real_user_balance.balance != 0:
-            if real_user_balance.balance >= int(ost):
-                buffer_money = int(real_user_balance.balance) - int(ost)
-                context['real_balance'] = real_user_balance.balance
-                context['buffer_money'] = buffer_money
+        # буферная сумма и реальный(указанный пользователем баланс карты)
+        if request.user.user_per_day.balance:
+            context['real_balance'] = request.user.user_per_day.balance
+        else:
+            context['real_balance'] = 0
+
+        if request.user.user_daily_cons.buffer_money:
+            context['buffer_money'] = request.user.user_daily_cons.buffer_money
+        else:
+            context['buffer_money'] = 0
         
 
         # временно фильтровать по статусу. далее автоматически
@@ -176,14 +178,13 @@ def expences_view(request):
         context["salary_for_mounth"] = sum_of_salary
 
     
-        context['money_per_day_to_salary'] = request.user.user_daily_cons.per_month
-
 
         # форма для уточнения резерва исходя из реального(данные которые введут) остатка на карте
         if request.method == 'POST':
             balance = request.POST.get('balance')
             difference = int(balance) - int(ost)
             context['difference'] = difference
+            real_user_balance = request.user.user_per_day
             real_user_balance.balance = balance
             real_user_balance.save()
             resrv = request.user.user_reserv.value + difference
