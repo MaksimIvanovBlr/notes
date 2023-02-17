@@ -1,17 +1,5 @@
 
-#daily_cons_balance {
-  color: gray;
-  font-size: large;
-  background-color: grey;
-  border-radius: 5px;
-  height: 175px;
-  width: 350px;
-  padding: 10px;
-  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
-  font-family: "Times New Roman", Times, serif;
-  text-shadow: #fff -1px -1px 0, 
-                 #605f5f 1px 1px 0;
-}
+
 
 .daily_cons_main_button{
   color: #fff;
