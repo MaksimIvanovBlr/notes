@@ -135,7 +135,8 @@ def expences_view(request):
 
         main_ost = request.user.user_daily_cons.per_month + request.user.user_daily_cons.buffer_money + \
             request.user.user_reserv.value + sum_of_not_paid + sum_of_not_used_additional
-
+            
+        ost = 0
         if last_transfer:
             if last_transfer[0].name == 'аванс':
                 ost = main_ost + last_transfer[0].value
