@@ -7,12 +7,12 @@
 
 
 {% block body %}
-<h1><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="btn btn-dark"><b>ДНЕВНОЙ ОСТАТОК</b></button></a></h1><br><br>
+<h1><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="daily_cons_main_button"><b>ДНЕВНОЙ ОСТАТОК</b></button></a></h1><br><br>
 
 
 <div id='daily_cons_balance' >
-    <p>Месячный остаток: {{ per_month }} руб</p>
-    <p>На количество дней: {{ days }}</p>
+    <p>Баланс: {{ per_month }} руб</p>
+    <p>Рассчитано на: {{ days }}(кол-во дней)</p>
     <p>Буфферные деньги: {{ buffer_money }} руб</p> 
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}

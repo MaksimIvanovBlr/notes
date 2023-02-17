@@ -1,13 +1,28 @@
 
 #daily_cons_balance {
-  color: black;
+  color: gray;
   font-size: large;
   background-color: grey;
   border-radius: 5px;
-  height: 200px;
-  width: 500px;
+  height: 175px;
+  width: 350px;
   padding: 10px;
-  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191)
+  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
+  text-shadow: #fff -1px -1px 0, 
+                 #605f5f 1px 1px 0;
+}
+
+.daily_cons_main_button{
+  color: #fff;
+  background-color: grey ;
+  text-shadow: #fff -1px -1px 0, 
+                 #605f5f 1px 1px 0;
+  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  font-size: large;
+  font-weight: bold;
+  border-radius: 5px;
+  font-family: "Times New Roman", Times, serif;
 }
 
 #text-field__input:focus {
@@ -17,16 +32,22 @@
   border-radius: 5px;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
 }
 #text-field__input {
   border-radius: 5px;
   width: 75px;
+  font-family: "Times New Roman", Times, serif;
 }
 .my_button{
   color:aliceblue;
   background-color: rgb(101, 50, 191);
   border-radius: 15px;
+  font-family: "Times New Roman", Times, serif;
 }
+
+
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
