@@ -348,7 +348,10 @@ class ListExpences(LoginRequiredMixin, generic.ListView):
         total = 0
         for obj in object_list_2:
             total += obj.value
-        context['total'] = total
+        daily_consumption = user.user_daily_cons.per_month
+        context['daily_consumption'] = daily_consumption
+        context['total_exp'] = total
+        context['total'] = total + daily_consumption
         return context
 
 

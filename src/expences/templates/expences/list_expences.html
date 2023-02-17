@@ -24,7 +24,7 @@
         {% else %}
         <td><s>{{obj.name}} </s></td>
          <td><s>{{obj.value}}</s></td>
-        <td><s>{{obj.user}}</s></td>
+        {% comment %} <td><s>{{obj.user}}</s></td> {% endcomment %}
         <td><s>{{obj.date}}</s></td>
         <td>
             {% if obj.status == False %}
@@ -40,7 +40,9 @@
     </tr>
     {% endfor %}
 </table>
-<h3>Общая сумма: <b>{{total_to_pay}}</b></h3>
-<h3>Осталось оплатить услуги на сумму: <b>{{total}}</b></h3>
+<h4>На дневные расходы до конца месяца: <b>{{ daily_consumption }}</b></h4>
+<h4>Общая сумма обязательных расходов: <b>{{total_to_pay}}</b></h4>
+<h4>Сумма неоплаченных обязательных расходов: <b> {% if total_exp == 0 %} Все оплачено {% else %}{{ total_exp }}{% endif %}</b></h4>
+<h4>Осталось оплатить услуги на сумму: <b>{{total}}</b></h4>
 <li><a href="{% url 'expences:create' %}">Добавить статью расходов</a></li>
 {% endblock body %}
