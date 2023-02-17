@@ -95,6 +95,13 @@ def expences_view(request):
         # дни до зарплаты
         context["days_to_salary"] = day_to_salary1
         # сумма на карте до конца месяца на ежедневные расходы
+
+        daily, created = models.DailyConsumption.objects.get_or_create(
+            user=request.user,
+            defaults={'per_month': day_to_salary1 * request.user.user_per_day.value,
+                    'buffer_money': 0            
+            }
+        )
         context["money_to_salary"] = request.user.user_daily_cons.per_month
 
         # сумма резерва на карте
