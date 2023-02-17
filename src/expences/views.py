@@ -8,6 +8,22 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from datetime import datetime
 
+def day_to(request):
+    now_date = datetime.now()
+    # now_date = datetime(2021.10.15) => for test
+    user_date = request.user.user_per_day.day.day
+    some_date2 = datetime(now_date.year, now_date.month, user_date)
+    if now_date.month == 12:
+        some_date = datetime(now_date.year + 1, 1, user_date)
+    else:
+        some_date = datetime(now_date.year, now_date.month + 1, user_date)
+    
+    if now_date.day < some_date.day:
+        day_to_salary1 = some_date2 - now_date
+    else:
+        day_to_salary1 = some_date - now_date
+    day_to_salary1 = day_to_salary1.days
+    return day_to_salary1
 
 class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
     model = models.PerDay
@@ -26,21 +42,7 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 def daily_consumption(request):
     context = {}
     
-    #нужно потом убрать это и подкидаывать только значение
-    now_date = datetime.now()
-    # now_date = datetime(2021.10.15) => for test
-    user_date = request.user.user_per_day.day.day
-    some_date2 = datetime(now_date.year, now_date.month, user_date)
-    if now_date.month == 12:
-        some_date = datetime(now_date.year + 1, 1, user_date)
-    else:
-        some_date = datetime(now_date.year, now_date.month + 1, user_date)
-    
-    if now_date.day < some_date.day:
-        day_to_salary1 = some_date2 - now_date
-    else:
-        day_to_salary1 = some_date - now_date
-    day_to_salary1 = day_to_salary1.days
+    day_to_salary1 = day_to(request=request)
 
     buffer_money = request.user.user_daily_cons.per_month - (request.user.user_per_day.value * day_to_salary1) 
     daily_consumption = request.user.user_daily_cons
@@ -89,21 +91,7 @@ def expences_view(request):
     try:
         context = {}
         #расчет даты
-        now_date = datetime.now()
-        # now_date = datetime(2021.10.15) => for test
-        user_date = request.user.user_per_day.day.day
-        some_date2 = datetime(now_date.year, now_date.month, user_date)
-        if now_date.month == 12:
-            some_date = datetime(now_date.year + 1, 1, user_date)
-        else:
-            some_date = datetime(now_date.year, now_date.month + 1, user_date)
-        
-        if now_date.day < some_date.day:
-            day_to_salary1 = some_date2 - now_date
-        else:
-            day_to_salary1 = some_date - now_date
-        day_to_salary1 = day_to_salary1.days
-
+        day_to_salary1 = day_to(request=request)
         # дни до зарплаты
         context["days_to_salary"] = day_to_salary1
         # сумма на карте до конца месяца на ежедневные расходы
@@ -126,15 +114,6 @@ def expences_view(request):
         for val in not_paid:
             sum_of_not_paid += val.value
         context["not_paid"] = sum_of_not_paid
-
-        # # дополнителнительные доходы за текущий месяц
-        # additional = models.AdditionalIncome.objects.filter(Q(user=request.user) & Q(date__year=datetime.now().year,
-        #                                                                              date__month=datetime.now().month))
-        # sum_of_additional = 0
-        # for add in additional:
-        #     sum_of_additional += add.value
-        # context["additional"] = sum_of_additional
-        
 
         # сумма дополнительных доходов, которые еще не использованны и все еще на карте
         not_used_additional = models.AdditionalIncome.objects.filter(
@@ -206,20 +185,7 @@ def expences_view(request):
 def recalculation(request):
     context = {}
 
-    now_date = datetime.now()
-    # now_date = datetime(2021.10.15) => for test
-    user_date = request.user.user_per_day.day.day
-    some_date2 = datetime(now_date.year, now_date.month, user_date)
-    if now_date.month == 12:
-        some_date = datetime(now_date.year + 1, 1, user_date)
-    else:
-        some_date = datetime(now_date.year, now_date.month + 1, user_date)
-
-    if now_date.day < some_date.day:
-        day_to_salary1 = some_date2 - now_date
-    else:
-        day_to_salary1 = some_date - now_date
-    day_to_salary1 = day_to_salary1.days
+    day_to_salary1 = day_to(request=request)
 
     if request.method == "POST":
 
@@ -501,25 +467,11 @@ class UpdatePerDay(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
             return False
     
     def get_success_url(self):
-        now_date = datetime.now()
-        # now_date = datetime(2021.10.15) => for test
-        user_date = self.request.user.user_per_day.day.day
-        some_date2 = datetime(now_date.year, now_date.month, user_date)
-        if now_date.month == 12:
-            some_date = datetime(now_date.year + 1, 1, user_date)
+        day = day_to(request=self.request)
+        if day == 0:
+            day_to_salary1 = 31
         else:
-            some_date = datetime(now_date.year, now_date.month + 1, user_date)
-
-        if now_date.day < some_date.day:
-            day_to_salary1 = some_date2 - now_date
-        else:
-            day_to_salary1 = some_date - now_date
-        day_to_salary1 = day_to_salary1.days
-
-        if day_to_salary1 == 0:
-            user_day_to_salary1 = 31
-        else:
-            user_day_to_salary1 = day_to_salary1 
+            day_to_salary1 = day
         
         daily_consumption = self.request.user.user_daily_cons
         daily_consumption.per_month = self.request.user.user_per_day.value * day_to_salary1
