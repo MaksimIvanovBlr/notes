@@ -7,23 +7,20 @@
 
 
 {% block body %}
-<h1><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="daily_cons_main_button"><b>ДНЕВНОЙ ОСТАТОК</b></button></a></h1><br><br>
-
-
-<div id='daily_cons_balance' >
-    <p>Баланс: {{ per_month }} руб</p>
-    <p>Рассчитано на: {{ days }}(кол-во дней)</p>
-    <p>Буфферные деньги: {{ buffer_money }} руб</p> 
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <p>Потраченно денег:  <input id="text-field__input" type="number" name="spend_money" value="0" min="0">
-        <button type="submit" class="my_button">ok</button></p>
-    </form>
+<div class="cons-link-buttons">
+<h1><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="daily_cons_main_button">ДНЕВНОЙ ОСТАТОК</button></a></h1>
+<h1><a href="{% url 'expences:main' %}"><button type="button" class="daily_cons_main_button">БЮЖДЕТ</button></a></h1>
 </div>
-
-<div>
-
-</div>
+    <div id='daily_cons_balance' >
+        <a class='link_to_exp-main' href="{% url 'expences:main' %}"><p>На счету: {{ total_money }}руб.</a>/<a class='link_to_exp-main' href="{% url 'expences:reserv' pk=user.user_reserv.pk %}">Резерв: {{reserv}}руб.</p></a>
+        <a class='link_to_exp-main' href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}"><p>Баланс: {{ per_month }} руб./{{ days }}(кол-во дней)</p></a>
+        <p>Буфферные деньги: {{ buffer_money }} руб</p> 
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>Потраченно денег:  <input id="text-field__input" type="number" name="spend_money" value="0" min="0">
+            <button type="submit" class="my_button">ok</button></p>
+        </form>
+    </div>
 <div>
     {% if spend_money %}
 

@@ -7,22 +7,37 @@
   height: 175px;
   width: 350px;
   padding: 10px;
+  margin: 20px;
   box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
   font-family: "Times New Roman", Times, serif;
   text-shadow: #fff -1px -1px 0, 
                  #605f5f 1px 1px 0;
 }
+.link_to_exp-main{
+  text-decoration: none;
+  color: gray;
+}
+
+.cons-link-buttons{
+  margin-bottom: 40px;
+}
 
 .daily_cons_main_button{
   color: #fff;
   background-color: grey ;
+  width: 250px;
+  height: 27px;
+  margin: 10px;
   text-shadow: #fff -1px -1px 0, 
                  #605f5f 1px 1px 0;
-  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
   font-size: large;
   font-weight: bold;
   border-radius: 5px;
   font-family: "Times New Roman", Times, serif;
+}
+.daily_cons_main_button:focus{
+  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
 }
 
 #text-field__input:focus {
@@ -31,7 +46,7 @@
   border-color: #2c038b;
   border-radius: 5px;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
   font-family: "Times New Roman", Times, serif;
 }
 #text-field__input {
@@ -43,9 +58,12 @@
   color:aliceblue;
   background-color: rgb(101, 50, 191);
   border-radius: 15px;
+  border: none;
   font-family: "Times New Roman", Times, serif;
 }
-
+.my_button:focus{
+  box-shadow: 0 0 0 0.1rem rgb(56, 12, 133);
+}
 
 
 .bd-placeholder-img {

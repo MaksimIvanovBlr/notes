@@ -40,48 +40,51 @@ class AddBaseInfoView(LoginRequiredMixin, generic.CreateView):
 
 @login_required(login_url='login')
 def daily_consumption(request):
-    context = {}
-    
-    day_to_salary1 = day_to(request=request)
+    try:
+        context = {}
+        
+        day_to_salary1 = day_to(request=request)
 
-    buffer_money = request.user.user_daily_cons.per_month - (request.user.user_per_day.value * day_to_salary1) 
-    daily_consumption = request.user.user_daily_cons
-    daily_consumption.buffer_money += buffer_money
-    daily_consumption.per_month = request.user.user_per_day.value * day_to_salary1
-    daily_consumption.save()
+        buffer_money = request.user.user_daily_cons.per_month - (request.user.user_per_day.value * day_to_salary1) 
+        daily_consumption = request.user.user_daily_cons
+        daily_consumption.buffer_money += buffer_money
+        daily_consumption.per_month = request.user.user_per_day.value * day_to_salary1
+        daily_consumption.save()
+
+        context['reserv'] = request.user.user_reserv.value
+        context['total_money'] = request.user.user_per_day.balance
+        context['per_month'] = request.user.user_daily_cons.per_month
+        context['buffer_money'] = request.user.user_daily_cons.buffer_money
+        context['days'] = request.user.user_daily_cons.per_month /  request.user.user_per_day.value
+
+        if request.method == "POST":
+            spend_money = int(request.POST.get('spend_money'))
+            context['spend_money'] = spend_money
+            reserv = request.user.user_reserv
+            if spend_money > daily_consumption.buffer_money:
+                spend_money -= daily_consumption.buffer_money
+                reserv.value -= spend_money
+                daily_consumption.buffer_money = 0
+                daily_consumption.save()
+                reserv.save()
 
 
+                context['alarm'] = 'Вы привысили лимит! Разница будет списана с "резерва".'
+                context['reserv_value'] = reserv.value
+                context['sum_that_gt'] = abs(daily_consumption.buffer_money - spend_money)
 
-    context['per_month'] = request.user.user_daily_cons.per_month
-    context['buffer_money'] = request.user.user_daily_cons.buffer_money
-    context['days'] = request.user.user_daily_cons.per_month /  request.user.user_per_day.value
+            else:
+                daily_consumption.buffer_money -= spend_money
+                daily_consumption.save()
+                context['spend_money_lt_buffer'] = daily_consumption.buffer_money 
 
-    if request.method == "POST":
-        spend_money = int(request.POST.get('spend_money'))
-        context['spend_money'] = spend_money
-        reserv = request.user.user_reserv
-        if spend_money > daily_consumption.buffer_money:
-            spend_money -= daily_consumption.buffer_money
-            reserv.value -= spend_money
-            daily_consumption.buffer_money = 0
-            daily_consumption.save()
-            reserv.save()
-
-
-            context['alarm'] = 'Вы привысили лимит! Разница будет списана с "резерва".'
-            context['reserv_value'] = reserv.value
-            context['sum_that_gt'] = abs(daily_consumption.buffer_money - spend_money)
-
-        else:
-            daily_consumption.buffer_money -= spend_money
-            daily_consumption.save()
-            context['spend_money_lt_buffer'] = daily_consumption.buffer_money 
-
-    return render(
-            request=request,
-            template_name="expences/daily_consumption.html",
-            context=context
-        )
+        return render(
+                request=request,
+                template_name="expences/daily_consumption.html",
+                context=context
+            )
+    except User.user_per_day.RelatedObjectDoesNotExist:
+        return redirect('expences:create-base-info')
 
 
 
