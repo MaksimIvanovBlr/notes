@@ -84,7 +84,7 @@
 </table>
 
 
-<form action="{% url 'expences:main' %}" method="post">
+<form id='balance' action="{% url 'expences:main' %}" method="post">
     {% csrf_token %}
     <p>Реальный баланс карты:</p>
     <p>Сумма:  <input type="number" name="balance" value="" min="0"></p>
