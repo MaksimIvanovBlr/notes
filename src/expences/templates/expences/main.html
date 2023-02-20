@@ -87,7 +87,7 @@
 <form id='balance' action="{% url 'expences:main' %}" method="post">
     {% csrf_token %}
     <p>Реальный баланс карты:</p>
-    <p>Сумма:  <input type="number" name="balance" value="" min="0"></p>
+    <p>Сумма:  <input id="input-real-balance" type="number" name="balance" value="" min="0"></p>
     <p><button type="submit" class="btn btn-secondary">Рассчитать резерв</button></p>
 </form>
 {% if difference %}

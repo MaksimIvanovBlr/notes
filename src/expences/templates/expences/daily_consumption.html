@@ -8,12 +8,12 @@
 
 {% block body %}
 <div class="cons-link-buttons">
-<h1><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="daily_cons_main_button">ДНЕВНОЙ ОСТАТОК</button></a></h1>
-<h1><a href="{% url 'expences:main' %}"><button type="button" class="daily_cons_main_button">БЮЖДЕТ</button></a></h1>
+    <p><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="daily_cons_main_button">ДНЕВНОЙ ОСТАТОК</button></a></p>
+    <p><a href="{% url 'expences:main' %}"><button type="button" class="daily_cons_main_button">БЮЖДЕТ</button></a></p>
 </div>
 
-    <div id='daily_cons_balance' >
-        <a class='link_to_exp-main' href="{% url 'expences:main'  %}#balance"><p>На счету: {{ total_money }}руб.</a></p>
+<div id='daily_cons_balance' >
+        <a class='link_to_exp-main' href="{% url 'expences:main'  %}#input-real-balance"><p>На счету: {{ total_money }}руб.</a></p>
         <a class='link_to_exp-main' href="{% url 'expences:reserv' pk=user.user_reserv.pk %}"><p>Резерв: {{reserv}}руб.</a> &nbsp &nbsp &nbsp<a class='link_to_exp-main' href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}">{{ days }}(кол-во дней)</p></a>
         <p>Буфферные деньги: {{ buffer_money }} руб</p> 
         <form action="" method="post" enctype="multipart/form-data">
@@ -21,25 +21,42 @@
             <p>Потраченно денег:  <input id="text-field__input" type="number" name="spend_money" value="0" min="0">
             <button type="submit" class="my_button">ok</button></p>
         </form>
-    </div>
-<div>
+ </div>
+
+<div class="spend_money">
     {% if spend_money %}
 
     
-    Потраченно: {{ spend_money }} руб <br>
+    <p>Потраченно: {{ spend_money }} руб </p>
 
     {% if buffer_money >= spend_money %}
 
-    Остаток: {{ spend_money_lt_buffer }}руб <br>
+    <p>Остаток: {{ spend_money_lt_buffer }}руб </p>
 
     {% else %} 
 
-    <h3>{{alarm}}</h3>
-    Сумма списанная с резерва: {{ sum_that_gt }}<br>
-    Резерв:{{ reserv_value }}<br>
+    <span class="alarm_message_for_daily_main"><p>{{alarm}}</p></span>
+    <span class="alarm_message_for_daily"><p>Сумма списанная с резерва: {{ sum_that_gt }}</p>
+    <p>Резерв:{{ reserv_value }}</p></span>
     {% endif %}
 
     {% endif %}
+</div>
+
+<div class="spend_money">
+    
+
+    
+<p>Потраченно: 100 руб</p>
+
+
+
+ <p>Остаток: 100 руб</p>
+
+    <span class="alarm_message_for_daily_main"><p>'Вы привысили лимит! Разница будет списана с "резерва"</p></span>
+    <span class="alarm_message_for_daily"><p>Сумма списанная с резерва: 200</p>
+    <p>Резерв:{{ reserv_value }}</p></span>
+
 </div>
 
 {% endblock body %}

@@ -1,13 +1,43 @@
 
+
+
+/* custom styles for daily_consumption template */
+
+.spend_money{
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 370px;
+  transform: translateY(-150%);
+  animation: ani 1s forwards;
+  z-index: -1;
+}
+@keyframes ani {
+  0% {transform: translateY(-150%);}
+  100% {transform: translateY(0);}
+}
+
+.alarm_message_for_daily_main{
+  color: #000;
+}
+
+.alarm_message_for_daily{
+  color: #000;
+}
+
+
 #daily_cons_balance {
   color: gray;
   font-size: large;
   background-color: grey;
   border-radius: 5px;
   height: 185px;
+  min-height: 180px;
   width: 370px;
+  min-width: 350px;
+  z-index: 999;
   padding: 5px;
-  margin: 20px;
+  margin: auto;
   box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
   font-family: "Times New Roman", Times, serif;
   text-shadow: #fff -1px -1px 0, 
@@ -19,15 +49,21 @@
 }
 
 .cons-link-buttons{
-  margin-bottom: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 370px;
+  margin-bottom: 60px;
+  z-index: 999;
+
 }
 
 .daily_cons_main_button{
   color: #fff;
   background-color: grey ;
-  width: 250px;
+  width: 370px;
   height: 27px;
-  margin: 10px;
+  position: relative;
+  margin: 0 auto;
   text-shadow: #fff -1px -1px 0, 
                  #605f5f 1px 1px 0;
   box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
@@ -65,6 +101,10 @@
   box-shadow: 0 0 0 0.1rem rgb(56, 12, 133);
 }
 
+
+/* ......................................... */
+
+/* from bootstrap */
 
 .bd-placeholder-img {
     font-size: 1.125rem;

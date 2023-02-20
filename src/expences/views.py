@@ -50,8 +50,13 @@ def daily_consumption(request):
         daily_consumption.buffer_money += buffer_money
         daily_consumption.per_month = request.user.user_per_day.value * day_to_salary1
         daily_consumption.save()
-
-        context['reserv'] = request.user.user_reserv.value
+        
+        reserv, created = models.Reserv.objects.get_or_create(
+            user=request.user,
+            defaults={'value': 0}
+        )
+        context['reserv'] = reserv.value
+        # context['reserv'] = request.user.user_reserv.value
         context['total_money'] = request.user.user_per_day.balance
         context['per_month'] = request.user.user_daily_cons.per_month
         context['buffer_money'] = request.user.user_daily_cons.buffer_money
