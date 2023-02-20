@@ -103,24 +103,24 @@
 
 <a href="javascript:history.back()"><button type="button" class="btn btn-dark"><i class="bi bi-arrow-left-square-fill"></i> назад</button></a>
 <br><br>
-
+<div class="created">
 {% if created %}
-<h5><strong>{{ created }}</strong></h5>
+<p>{{ created }}</p>
 {% endif %}
-
+</div>
 
 <div class="cons-link-buttons">
-<p><a href="{% url 'expences:main' %}"><button type="button" class="daily_cons_main_button"><strong>{{attention}}</strong> БЮДЖЕТ</button></a></p>
+<p><a href="{% url 'expences:main' %}"><button type="button" class="daily_cons_main_button"><span class="created-span">{{attention}}</span> БЮДЖЕТ</button></a></p>
 
 <p><a href="{% url 'expences:daily-consumption' %}"><button type="button" class="daily_cons_main_button">ДНЕВНОЙ ОСТАТОК</button></a></p>
 <details>
     <summary class="daily_cons_main_button">Данные(детальнее)</summary>
-<p><a href="{% url 'expences:list' %}"><button type="button" class="daily_cons_main_button"><strong>{{attention}}</strong> Расходы</button></a></p>
-<p><a href="{% url 'expences:list-s' %}"><button type="button" class="daily_cons_main_button"><strong>{{attention}}</strong> Основной доход</button></a></p>
+<p><a href="{% url 'expences:list' %}"><button type="button" class="daily_cons_main_button"><span class="created-span">{{attention}}</span> Расходы</button></a></p>
+<p><a href="{% url 'expences:list-s' %}"><button type="button" class="daily_cons_main_button"><span class="created-span">{{attention}}</span> Основной доход</button></a></p>
 <p><a href="{% url 'expences:list-a' %}"><button type="button" class="daily_cons_main_button">Дополнительные доходы</button></a></p>
 <p><a href="{% url 'expences:reserv' pk=user.user_reserv.pk %}"><button type="button" class="daily_cons_main_button">Изменить резерв</button></a></p>
-<p><a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}" class="text"><button type="button" class="daily_cons_main_button">Основные данные (?)</button></a></p>
-<p><a href="{% url 'expences:recalculation' %}"><button type="button" class="daily_cons_main_button"><strong>{{attention}}</strong> Пересчитать резерв(месячный)</button></a></p>
+<p><a href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}" class="text"><button type="button" class="daily_cons_main_button">Основные данные</button></a></p>
+<p><a href="{% url 'expences:recalculation' %}"><button type="button" class="daily_cons_main_button"><span class="created-span">{{attention}}</span> Пересчитать резерв</button></a></p>
 </details>
 </div>
 
