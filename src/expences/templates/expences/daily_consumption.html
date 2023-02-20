@@ -12,7 +12,7 @@
     <p><a href="{% url 'expences:main' %}"><button type="button" class="daily_cons_main_button">БЮЖДЕТ</button></a></p>
 </div>
 
-<div id='daily_cons_balance' >
+<div class='daily_cons_balance' >
         <a class='link_to_exp-main' href="{% url 'expences:main'  %}#input-real-balance"><p>На счету: {{ total_money }}руб.</a></p>
         <a class='link_to_exp-main' href="{% url 'expences:reserv' pk=user.user_reserv.pk %}"><p>Резерв: {{reserv}}руб.</a> &nbsp &nbsp &nbsp<a class='link_to_exp-main' href="{% url 'expences:update-per-day' pk=user.user_per_day.pk %}">{{ days }}(кол-во дней)</p></a>
         <p>Буфферные деньги: {{ buffer_money }} руб</p> 

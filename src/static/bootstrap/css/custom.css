@@ -1,7 +1,35 @@
+/* for main expences */
+.exp-main-balance-info{
+  margin-left: auto;
+  margin-right: auto;
+  width: 370px;
+  margin-bottom: 60px;
 
+}
 
+.exp-input-real-balance{
+  margin-left: auto;
+  margin-right: auto;
+  width: 370px;
 
-/* custom styles for daily_consumption template */
+}
+
+#input-real-balance:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #2c038b;
+  border-radius: 5px;
+  outline: 0;
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
+}
+#input-real-balance {
+  border-radius: 5px;
+  width: 75px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* expences custom styles for daily_consumption template */
 
 .spend_money{
   margin-top: 20px;
@@ -27,7 +55,7 @@
 }
 
 
-#daily_cons_balance {
+.daily_cons_balance {
   color: gray;
   font-size: large;
   background-color: grey;
@@ -72,7 +100,7 @@
 }
 .daily_cons_main_button:focus{
   box-shadow: 50px 50px 5000px rgb(101, 50, 191);
-  animation: 0.5s forwards
+  animation: 0.5s
 }
 
 #text-field__input:focus {
@@ -97,7 +125,9 @@
   font-family: "Times New Roman", Times, serif;
 }
 .my_button:focus{
-  box-shadow: 0 0 0 0.1rem rgb(56, 12, 133);
+  /* box-shadow: 0 0 0 0.1rem rgb(56, 12, 133); */
+  box-shadow: 5px 5px 50px rgb(101, 50, 191);
+  animation: 1s forwards
 }
 
 
