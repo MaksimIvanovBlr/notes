@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     "homepage",
     "notes",
     "expences",
-    "user_register"
+    "user_register",
+    "sport",
 ]
 
 MIDDLEWARE = [

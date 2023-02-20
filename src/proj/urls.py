@@ -11,7 +11,9 @@ urlpatterns = [
     path("", include('homepage.urls', namespace='homepage')),
     path("expences/", include('expences.urls'), name="expences"),
     path("notes/", include('notes.urls'), name="notes"),
-    path("user/", include('user_register.urls'), name="user")
+    path("user/", include('user_register.urls'), name="user"),
+    path("sport/", include('sport.urls'), name="sport")
+
 ]
 
 if settings.DEBUG:
