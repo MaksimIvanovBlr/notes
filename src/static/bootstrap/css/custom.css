@@ -9,20 +9,21 @@
   margin-right: auto;
   width: 370px;
   transform: translateY(-150%);
-  animation: ani 1s forwards;
-  z-index: -1;
+  animation: ani 1s forwards
 }
 @keyframes ani {
-  0% {transform: translateY(-150%);}
+  0% {transform: translateY(-3000%);}
   100% {transform: translateY(0);}
 }
 
 .alarm_message_for_daily_main{
-  color: #000;
+  color: red;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 .alarm_message_for_daily{
-  color: #000;
+  color: red;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 
@@ -35,10 +36,9 @@
   min-height: 180px;
   width: 370px;
   min-width: 350px;
-  z-index: 999;
   padding: 5px;
   margin: auto;
-  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
   font-family: "Times New Roman", Times, serif;
   text-shadow: #fff -1px -1px 0, 
                  #605f5f 1px 1px 0;
@@ -53,8 +53,6 @@
   margin-right: auto;
   width: 370px;
   margin-bottom: 60px;
-  z-index: 999;
-
 }
 
 .daily_cons_main_button{
@@ -73,7 +71,8 @@
   font-family: "Times New Roman", Times, serif;
 }
 .daily_cons_main_button:focus{
-  box-shadow: 0 0 0 0.2rem rgb(101, 50, 191);
+  box-shadow: 50px 50px 5000px rgb(101, 50, 191);
+  animation: 0.5s forwards
 }
 
 #text-field__input:focus {
