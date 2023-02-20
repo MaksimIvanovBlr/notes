@@ -14,3 +14,12 @@ class HomepageView(generic.TemplateView):
 
 class SubscriptionView(generic.TemplateView):
     template_name = "sport/subscription.html"
+
+
+class SubscriptionCreateView(generic.CreateView):
+    model = models.SubscriptionModel
+    template_name = ".html"
+
+class SubscriptionVisitCreateView(generic.CreateView):
+    model = models.SubscriptionVisit
+    template_name = ".html"

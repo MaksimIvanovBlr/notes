@@ -18,6 +18,10 @@ class SubscriptionModel(models.Model):
         related_name='user_subscription',
         on_delete=models.PROTECT
     )
+    name = models.CharField(
+        verbose_name='Наименование',
+        max_length=50)
+
     datestart = models.DateField(
         verbose_name='Дата начала абонемента', 
         auto_now_add=True)
@@ -32,7 +36,7 @@ class SubscriptionModel(models.Model):
     )
 
 
-class SubscriptionVisits(models.Model):
+class SubscriptionVisit(models.Model):
     user = models.ForeignKey(
         user,
         verbose_name='Пользователь',
