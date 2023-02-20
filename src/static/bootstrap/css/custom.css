@@ -7,6 +7,42 @@
 
 }
 
+.exp-links-text{
+  text-decoration: none;
+  color: black;
+}
+
+.exp-main-balance-info {
+  color: black;
+  font-size: large;
+  background-color: grey;
+  border-radius: 5px;
+  min-height: 180px;
+  width: 370px;
+  min-width: 350px;
+  padding: 5px;
+  margin: auto;
+  margin-bottom: 20px;
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
+}
+
+.exp-input-real-balance {
+  color: black;
+  font-size: large;
+  background-color: grey;
+  border-radius: 5px;
+  height: 40px;
+  min-height: 40px;
+  width: 370px;
+  min-width: 350px;
+  padding: 5px;
+  margin: auto;
+  margin-bottom: 20px;
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
+}
+
 .exp-input-real-balance{
   margin-left: auto;
   margin-right: auto;
