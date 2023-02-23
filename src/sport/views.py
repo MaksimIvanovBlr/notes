@@ -17,6 +17,11 @@ class SubscriptionView(LoginRequiredMixin,generic.TemplateView):
     template_name = "sport/subscription.html"
     login_url = reverse_lazy('login')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = models.SubscriptionModel.objects.filter(Q(user=self.request.user) & Q(status=True))
+        return context
+
 
 
 class SubscriptionCreateView(LoginRequiredMixin,generic.CreateView):
@@ -129,7 +134,7 @@ class SubscriptionVisitCreateView(LoginRequiredMixin,generic.CreateView):
     model = models.SubscriptionVisit
     form_class = forms.SubscriptionVisitsForm
     login_url = reverse_lazy('login')
-    # success_url = reverse_lazy(':list')
+    success_url = reverse_lazy('sport:subscription')
     template_name = "sport/add_train.html"
 
     def get_context_data(self, **kwargs):
@@ -140,3 +145,65 @@ class SubscriptionVisitCreateView(LoginRequiredMixin,generic.CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class SubscriptionVisitListView(LoginRequiredMixin, generic.ListView):
+    model = models.SubscriptionVisit
+    template_name = "sport/list_subscription_visit.html"
+    login_url = reverse_lazy('login')
+
+    def get_queryset(self):
+        # subscription = models.SubscriptionVisit.objects.all()
+        # print(subscription)
+        object_list = models.SubscriptionVisit.objects.filter(Q(user=self.request.user))
+        return object_list
+
+class SubscriptionVisitListView(LoginRequiredMixin, generic.ListView):
+    model = models.SubscriptionVisit
+    template_name = "sport/list_subscription_visit.html"
+    login_url = reverse_lazy('login')
+
+    def get_queryset(self):
+        # subscription = models.SubscriptionVisit.objects.all()
+        # print(subscription)
+        object_list = models.SubscriptionVisit.objects.filter(Q(user=self.request.user))
+        return object_list
+
+class SubscriptionVisitDeleteView(UserPassesTestMixin, LoginRequiredMixin, generic.DeleteView):
+    model = models.SubscriptionVisit
+    template_name = "sport/delete_subscription_visit.html"
+    success_url = reverse_lazy('sport:subscription')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Удаление тренировки'
+        context["alert_message"] = 'Вы точно хотите удалить данную запись о тренировке???'
+        return context
+
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False
+
+class SubscriptionVisitUpdateView(UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView):
+    model = models.SubscriptionVisit
+    form_class = forms.SubscriptionVisitsForm
+    template_name = "sport/edit_subscription_visit.html"
+    success_url = reverse_lazy('sport:subscription')
+    login_url = reverse_lazy('login')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["operation"] = 'Внести изменения'
+        return context
+
+
+    def test_func(self):
+        for_test = self.get_object()
+        if self.request.user == for_test.user:
+            return True
+        else:
+            return False

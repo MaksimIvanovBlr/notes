@@ -9,16 +9,25 @@
         <p><a href ="{% url 'sport:list-subscription' %}">Список абонемнеметов</a></p>
 </div>
 
-
+{% for obj in object_list %}
 <div>
-<p>Дата начал абонемента</p>
-<p>Дата окончания абонемента</p>
-<p>Всего занятий</p>
-<p>Осталось занятий</p>
-<p><a href ="{% url 'sport:subscription' %}">Добавить тренировку</a></p>
-<p><a href ="{% url 'sport:subscription' %}">Список тренировок</a></p>
+<p>Название {{obj.name}}</p>    
+<p>Дата начал абонемента {{obj.datestart}}</p>
+<p>Дата окончания абонемента {{obj.datestart}}</p>
+<p>Всего занятий {{obj.quantity}}</p>
+<p>Осталось занятий{{obj.quantity }}</p>
+<p>!!!{{obj.pk}}</p>
+<div>
+    <form action="{% url 'sport:create-subscription-visit' %}" method="post">
+        {% csrf_token %}
+        <p><button type="submit" class="btn btn-success">Добавить тренировку</button></p>
+        <p>Комментарий:<input type="text" name="info" ></p>
+        <input type="hidden" name="subscription" value="{{obj.pk}}">    
+    </form>
 </div>
-
+<p><a href ="{% url 'sport:list-subscription-visit' %}">Список тренировок</a></p>
+</div>
+{% endfor %}
 
 
 {% endblock body %}

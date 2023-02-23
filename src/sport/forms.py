@@ -10,4 +10,4 @@ class SubscriptionForm(forms.ModelForm):
 class SubscriptionVisitsForm(forms.ModelForm):
     class Meta:
         model = models.SubscriptionVisit
-        fields = ('subscription',)
+        fields = ('info','subscription')

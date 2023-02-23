@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} {{operation}} {% endblock title %}
+
+{% block body %}
+<a href="javascript:history.back()"><button type="button" class="btn btn-light"><i class="bi bi-arrow-left-square-fill"></i> назад</button></a>
+<br>
+<h1>{{operation}} </h1>
+
+<div>
+    <form action="{% url 'sport:update-subscription-visit' pk=object.pk %}" method="post">
+        {% csrf_token %}
+        <p><button type="submit" class="btn btn-success">Ok</button></p>
+        <p>Комментарий:<input type="text" name="info" ></p>
+        <input type="hidden" name="subscription" value="{{object.subscription.pk}}">    
+    </form>
+</div>
+{% endblock body %}

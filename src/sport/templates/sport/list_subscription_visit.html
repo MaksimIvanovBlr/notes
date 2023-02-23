@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Список тренировок{% endblock title %}
+
+{% block body %}
+<a href="javascript:history.back()"><button type="button" class="btn btn-light"><i class="bi bi-arrow-left-square-fill"></i> назад</button></a>
+<h1>Список тренировок</h1>
+<table class="table table-dark table-striped">
+    {% for obj in object_list %}
+    <tr>
+        <td>{{obj.subscription.name}} </td>
+        <td>{{obj.visit_date}}</td>
+        <td>{{obj.info}}</td>
+        <td><a href= "{% url 'sport:update-subscription-visit' pk=obj.pk %}" class="btn btn-info"><i class="bi bi-pencil-fill"></i></a></td>
+        <td><a href= "{% url 'sport:delete-subscription-visit' pk=obj.pk %}" class="btn btn-danger"><i class="bi bi-trash"></i></a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock body %}

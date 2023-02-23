@@ -54,3 +54,8 @@ class SubscriptionVisit(models.Model):
         auto_now_add=True,
 
     )
+    info = models.CharField(
+        verbose_name='Комментарий',
+        max_length=50,
+        blank=True,
+        null=True)
