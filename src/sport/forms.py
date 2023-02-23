@@ -4,7 +4,7 @@ from . import models
 class SubscriptionForm(forms.ModelForm):
     class Meta:
         model = models.SubscriptionModel
-        fields = ('name', 'quantity')
+        fields = ('name', 'quantity','status')
 
 
 class SubscriptionVisitsForm(forms.ModelForm):
