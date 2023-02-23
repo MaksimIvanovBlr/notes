@@ -9,17 +9,25 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 
-class HomepageView(generic.TemplateView):
+class HomepageView(LoginRequiredMixin,generic.TemplateView):
+    login_url = reverse_lazy('login')
     template_name = "sport/sport_main.html"
 
-class SubscriptionView(generic.TemplateView):
+class SubscriptionView(LoginRequiredMixin,generic.TemplateView):
     template_name = "sport/subscription.html"
+    login_url = reverse_lazy('login')
 
 
-class SubscriptionCreateView(generic.CreateView):
+class SubscriptionCreateView(LoginRequiredMixin,generic.CreateView):
     model = models.SubscriptionModel
-    template_name = ".html"
+    form_class = forms.SubscriptionForm    
+    login_url = reverse_lazy('login')
+    template_name = "sport/edit_subscription.html"
 
-class SubscriptionVisitCreateView(generic.CreateView):
+
+
+class SubscriptionVisitCreateView(LoginRequiredMixin,generic.CreateView):
     model = models.SubscriptionVisit
-    template_name = ".html"
+    form_class = forms.SubscriptionVisitsForm
+    login_url = reverse_lazy('login')
+    template_name = "sport/add_train.html"

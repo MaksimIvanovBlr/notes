@@ -4,7 +4,19 @@
 {% endblock title %}
 {% block body %}
 <div>
-    <a href ="{% url 'sport:subscription' %}">Абонемент</a>
+    <p>Абонеметы</p>
+        <p><a href ="{% url 'sport:subscription' %}">Добавить</a></p>
+        <p><a href ="{% url 'sport:subscription' %}">Список абонемнеметов</a></p>
+</div>
+
+
+<div>
+<p>Дата начал абонемента</p>
+<p>Дата окончания абонемента</p>
+<p>Всего занятий</p>
+<p>Осталось занятий</p>
+<p><a href ="{% url 'sport:subscription' %}">Добавить тренировку</a></p>
+<p><a href ="{% url 'sport:subscription' %}">Список тренировок</a></p>
 </div>
 
 
