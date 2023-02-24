@@ -47,7 +47,7 @@ class SubscriptionVisit(models.Model):
         'sport.SubscriptionModel',
         verbose_name='Абонемент',
         related_name='subscription_subscription_visits',
-        on_delete=models.PROTECT
+        on_delete=models.CASCADE
     )
     visit_date = models.DateTimeField(
         verbose_name='Дата посещения',

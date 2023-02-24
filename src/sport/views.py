@@ -19,7 +19,7 @@ class SubscriptionView(LoginRequiredMixin,generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['object_list'] = models.SubscriptionModel.objects.filter(Q(user=self.request.user) & Q(status=True))
+        context['object_list'] = models.SubscriptionModel.objects.filter(Q(user=self.request.user) & Q(status=True)).order_by('-datestart')
         return context
 
 
