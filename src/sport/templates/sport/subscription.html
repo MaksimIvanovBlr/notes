@@ -3,29 +3,33 @@
 Абонемент
 {% endblock title %}
 {% block body %}
-<div>
-    <p>Абонеметы</p>
-        <p><a href ="{% url 'sport:create-subscription' %}">Добавить</a></p>
-        <p><a href ="{% url 'sport:list-subscription' %}">Список абонемнеметов</a></p>
+<div class="sport-main-block">
+    <h2>Абонеметы</h2>
+        <p><a class="sport-main-block-link" href ="{% url 'sport:create-subscription' %}"><i class="bi bi-plus-circle"></i> Добавить</a></p>
+        <p><a class="sport-main-block-link" href ="{% url 'sport:list-subscription' %}"><i class="bi bi-card-list"></i> Список абонемнеметов</a></p>
+        <hr/>
 </div>
 
 {% for obj in object_list %}
-<div>
-<p>Название {{obj.name}}</p>    
-<p>Дата начал абонемента {{obj.datestart}}</p>
-<p>Дата окончания абонемента {{obj.datestart}}</p>
-<p>Всего занятий {{obj.quantity}}</p>
-<p>Осталось занятий{{obj.quantity }}</p>
-<p>!!!{{obj.pk}}</p>
+<div class="subscription-card">
+<p>Название: {{obj.name}}</p>    
+<p>Дата начала: {{obj.datestart}}</p>
+<p>Дата окончания: {{obj.datestart}}</p>
+<p>Всего занятий: {{obj.quantity}}&nbsp|&nbspОсталось занятий: {{obj.quantity }}</p>
+<hr/>
 <div>
     <form action="{% url 'sport:create-subscription-visit' %}" method="post">
         {% csrf_token %}
-        <p><button type="submit" class="btn btn-success">Добавить тренировку</button></p>
-        <p>Комментарий:<input type="text" name="info" ></p>
+        <p><button class="post-subscription-button" type="submit" class="btn btn-success">Добавить тренировку</button></p>
         <input type="hidden" name="subscription" value="{{obj.pk}}">    
+        <details>
+            <summary>Комментарий:</summary>
+        <p><input class="field-input-subscription" type="text" name="info" placeholder="Тренировка ног..." ></p>
+        </details>
     </form>
 </div>
-<p><a href ="{% url 'sport:list-subscription-visit' %}">Список тренировок</a></p>
+<hr/>
+<p><a class="subscription-main-block-link" href  ="{% url 'sport:list-subscription-visit' %}"><i class="bi bi-card-list"></i>&nbspСписок тренировок</a></p>
 </div>
 {% endfor %}
 

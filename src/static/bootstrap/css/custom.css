@@ -1,5 +1,76 @@
 /* sport */
+/* main */
+.sport-main-block{
+  width: 370px;
+  margin-bottom: 10px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: x-large;
+    text-shadow: #ffffff -1px -1px 0, 
+                 #6b0ae9 1px 1px 0;
+}
 
+.sport-main-block-link{
+  color:white;
+  text-decoration: none;
+}
+
+.sport-main-block-link:focus{
+  box-shadow: 5px 5px 50px rgb(101, 50, 191);
+  animation: 1s forwards
+}
+
+/*subscription  */
+.subscription-card{
+  color: gray;
+  font-size: large;
+  background-color: rgb(36, 101, 73);
+  border-radius: 5px;
+  min-height: 180px;
+  min-width: 350px;
+  padding: 5px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
+  text-shadow: #fff -1px -1px 0, 
+                 #605f5f 1px 1px 0;
+
+}
+
+.subscription-main-block-link{
+  color: gray;
+  text-decoration: none;
+}
+
+
+.field-input-subscription:focus {
+  color: #212529;
+  background-color: gray;
+  border-color: #2c038b;
+  border-radius: 5px;
+  outline: 0;
+  box-shadow: 0 0 0 0.1rem rgb(101, 50, 191);
+  font-family: "Times New Roman", Times, serif;
+}
+.field-input-subscription  {
+  border-radius: 5px;
+  background-color: gray;
+  width: 350px;
+  font-family: "Times New Roman", Times, serif;
+}
+.post-subscription-button{
+  color:aliceblue;
+  background-color: rgb(101, 50, 191);
+  border-radius: 15px;
+  position: relative;
+  margin: auto;
+  border: none;
+  font-family: "Times New Roman", Times, serif;
+}
+.post-subscription-button:focus{
+  /* box-shadow: 0 0 0 0.1rem rgb(56, 12, 133); */
+  box-shadow: 5px 5px 50px rgb(101, 50, 191);
+  animation: 1s forwards
+}
 
 
 /* for main expences */
