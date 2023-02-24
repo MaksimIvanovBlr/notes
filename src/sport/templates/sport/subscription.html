@@ -15,7 +15,7 @@
 <p>Название: {{obj.name}}</p>    
 <p>Дата начала: {{obj.datestart}}</p>
 <p>Дата окончания: {{obj.datestop}}</p>
-<p>Всего занятий: {{obj.quantity}}&nbsp|&nbspОсталось занятий: {{obj.quantity }}</p>
+<p>Всего занятий: {{obj.quantity}}&nbsp|&nbspОсталось занятий: {{obj.leftover }}</p>
 <hr/>
 <div>
     <form action="{% url 'sport:create-subscription-visit' %}" method="post">

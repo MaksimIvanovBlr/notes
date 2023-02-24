@@ -39,6 +39,15 @@ class SubscriptionModel(models.Model):
     def datestop(self):
         dates = date(self.datestart.year, self.datestart.month+1, self.datestart.day)
         return dates
+    
+    @property
+    def leftover(self):
+        train = self.subscription_subscription_visits.all().count()
+        left = self.quantity - train
+        if left == 1:
+            self.status = False
+            self.save()
+        return left
 
 
 class SubscriptionVisit(models.Model):
@@ -64,3 +73,4 @@ class SubscriptionVisit(models.Model):
         max_length=50,
         blank=True,
         null=True)
+    

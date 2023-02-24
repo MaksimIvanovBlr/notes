@@ -104,24 +104,6 @@ class SubscriptionListView(LoginRequiredMixin, generic.ListView):
             user=self.request.user)
         return object_list
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     user = self.request.user
-    #     object_list = models.Expediture.objects.filter(user=user)
-    #     total_to_pay = 0
-    #     for obj in object_list:
-    #         total_to_pay += obj.value
-    #     context["total_to_pay"] = total_to_pay
-    #     object_list_2 = models.Expediture.objects.filter(
-    #         Q(user=user) & Q(status=False))
-    #     total = 0
-    #     for obj in object_list_2:
-    #         total += obj.value
-    #     daily_consumption = user.user_daily_cons.per_month
-    #     context['daily_consumption'] = daily_consumption
-    #     context['total_exp'] = total
-    #     context['total'] = total + daily_consumption
-    #     return context
 
 
 
@@ -145,9 +127,7 @@ class SubscriptionVisitCreateView(LoginRequiredMixin,generic.CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
-    
-    def get_success_url(self):
-        return super().get_success_url()
+
 
 
 
@@ -159,6 +139,9 @@ class SubscriptionVisitListView(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         # subscription = models.SubscriptionVisit.objects.all()
         # print(subscription)
+        # train = self.subscription_subscription_visits.all().count()
+        train = models.SubscriptionVisit.subscription
+        print(train)
         object_list = models.SubscriptionVisit.objects.filter(Q(user=self.request.user))
         return object_list
 

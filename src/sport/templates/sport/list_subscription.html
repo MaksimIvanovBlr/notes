@@ -12,6 +12,7 @@
         <td>{{obj.datestart}}</td>
         <td>{{obj.status}}</td>
         <td>{{obj.quantity}}</td>
+        <td><a class="subscription-main-block-link" href  ="{% url 'sport:list-subscription-visit' %}"><i class="bi bi-card-list"></i>&nbspСписок тренировок</a></p></td>
         <td> 
             {% if obj.status == True %}
             Активный
@@ -24,7 +25,6 @@
          <td><s>{{obj.datestart}}</s></td>
         <td><s>{{obj.status}}</s></td>
         <td><s>{{obj.quantity}}</s></td>
-        <td>
             {% if obj.status == True %}
             Не оплачено
             {% else %}
