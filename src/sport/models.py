@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from datetime import date
 
 user = get_user_model()
 
@@ -34,6 +35,10 @@ class SubscriptionModel(models.Model):
         verbose_name='Количество занятий',
 
     )
+    @property
+    def datestop(self):
+        dates = date(self.datestart.year, self.datestart.month+1, self.datestart.day)
+        return dates
 
 
 class SubscriptionVisit(models.Model):

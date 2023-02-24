@@ -145,18 +145,11 @@ class SubscriptionVisitCreateView(LoginRequiredMixin,generic.CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+    
+    def get_success_url(self):
+        return super().get_success_url()
 
 
-class SubscriptionVisitListView(LoginRequiredMixin, generic.ListView):
-    model = models.SubscriptionVisit
-    template_name = "sport/list_subscription_visit.html"
-    login_url = reverse_lazy('login')
-
-    def get_queryset(self):
-        # subscription = models.SubscriptionVisit.objects.all()
-        # print(subscription)
-        object_list = models.SubscriptionVisit.objects.filter(Q(user=self.request.user))
-        return object_list
 
 class SubscriptionVisitListView(LoginRequiredMixin, generic.ListView):
     model = models.SubscriptionVisit
